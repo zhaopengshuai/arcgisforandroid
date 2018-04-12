@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bantouming"
+    tools:ignore="ResAuto">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+         android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/baise"
+            android:orientation="vertical">
+            <!--设置-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x140"
+                android:background="@color/setbackground_bton"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/x48"
+                    android:layout_height="@dimen/x48"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:src="@drawable/sz" />
+                <TextView
+                    android:id="@+id/set_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/action_settings"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:textColor="@color/drug_bton"
+                    android:textSize="@dimen/text_size22" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_marginTop="@dimen/x80"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/ywmessage"
+                    android:orientation="vertical">
+                    <!--设备连接状态-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x120"
+                        android:layout_marginRight="@dimen/x60"
+                        android:layout_marginLeft="@dimen/x60"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/tvDeviceText"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+
+                        <TextView
+                            android:id="@+id/connect_type"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/sick_bton"
+                            android:layout_marginLeft="@dimen/x30"
+                            android:textSize="@dimen/text_size20" />
+                    </LinearLayout>
+                    <!--上次连接设备-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/x120"
+                        android:layout_marginRight="@dimen/x60"
+                        android:layout_marginLeft="@dimen/x60"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/tvSavedDeviceAddressText"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+
+                        <TextView
+                            android:id="@+id/connect_equipment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/sick_bton"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/x30"
+                            android:textSize="@dimen/text_size20" />
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="20" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <!--设置连接方式-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x120"
+                android:layout_marginTop="@dimen/x80"
+                android:layout_marginLeft="@dimen/x180"
+                android:layout_marginRight="@dimen/x180"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnSelectDevice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/orange"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:onClick="onSelect"
+                    android:text="@string/btnSelectDeviceText"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size20" />
+
+
+            </LinearLayout>
+
+            <!--连接此设备-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x120"
+                android:layout_marginTop="@dimen/x50"
+                android:layout_marginLeft="@dimen/x180"
+                android:layout_marginRight="@dimen/x180"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnConnectDevice"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/gray"
+                    android:gravity="center"
+                    android:onClick="checkDeviceConnection"
+                    android:text="@string/btnConnectDeviceText"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size20" />
+            </LinearLayout>
+
+            <!--关于-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x120"
+                android:layout_marginTop="@dimen/x50"
+                android:layout_marginLeft="@dimen/x180"
+                android:layout_marginRight="@dimen/x180"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/about"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/drug_bton"
+                    android:text="@string/about"
+                    android:gravity="center"
+                    android:onClick="onAbout"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size20" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x120"
+                android:layout_marginTop="@dimen/x80"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/x50"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/save"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="match_parent"
+                    android:background="@color/drug_bton"
+                    android:gravity="center"
+                    android:onClick="onSave"
+                    android:text="@string/btnSaveText"
+                    android:layout_marginRight="@dimen/x30"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size18"
+                    />
+
+                <Button
+                    android:id="@+id/cancel"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:background="@color/drug_bton"
+                    android:onClick="Cancel"
+                    android:text="@string/cancel"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size18"
+                    />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

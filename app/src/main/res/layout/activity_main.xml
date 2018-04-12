@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.renshaole.testarcgis.MainActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.esri.android.map.MapView
+            android:id="@+id/map"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+        </com.esri.android.map.MapView>
+        <CheckBox
+            android:id="@+id/chkbox_isFollow"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_isFollow"/>
+        <CheckBox
+            android:id="@+id/chkbox_isGuiJi"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            android:text="启动轨迹"
+            tools:ignore="HardcodedText" />
+        <CheckBox
+            android:id="@+id/chkbox_isLookGuiJi"
+            android:checked="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x80"
+            android:text="显示轨迹"
+            tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/tvRouteNews"
+            android:layout_width="@dimen/x400"
+            android:layout_height="@dimen/x80"
+            android:layout_marginLeft="@dimen/x30"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/x160"
+            android:text="机动路线历史记录"
+            android:textColor="#000"
+            tools:ignore="HardcodedText" />
+
+        <ImageView
+            android:id="@+id/GPS_btn"
+            android:layout_gravity="right|bottom"
+            android:layout_width="@dimen/x160"
+            android:layout_height="@dimen/x160"
+            android:src="@drawable/gps_btn_selector"
+            tools:ignore="RtlHardcoded" />
+        <TextView
+            android:id="@+id/tvX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_marginBottom="@dimen/x190"
+            android:text=""
+            android:layout_gravity="bottom"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+        <TextView
+            android:id="@+id/tvY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_marginBottom="@dimen/x120"
+            android:text=""
+            android:layout_gravity="bottom"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+        <TextView
+            android:id="@+id/tvScale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_marginBottom="@dimen/x50"
+            android:text="2000公里"
+            android:layout_gravity="bottom"
+            tools:ignore="HardcodedText,RtlHardcoded" />
+
+        <ImageView
+            android:id="@+id/iv_connnect"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/x120"
+            android:layout_gravity="right"
+            android:src="@drawable/btn_lj_p"
+            android:textSize="@dimen/text_size18"
+            tools:ignore="RtlHardcoded" />
+    </FrameLayout>
+
+</LinearLayout>

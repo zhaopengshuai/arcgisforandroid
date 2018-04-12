@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name">定位系统</string>
+    <string name="btn_isFollow">启用视角跟随模式</string>
+
+    <string name="action_settings">设置</string>
+
+    <!-- DeviceListActivity -->
+    <string name="scanning">扫描设备&#8230;</string>
+    <string name="select_device">选择一个设备连接</string>
+    <string name="none_paired">没有设备进行配对</string>
+    <string name="none_found">找不到设备</string>
+    <string name="title_paired_devices">配对设备</string>
+    <string name="title_other_devices">其他设备</string>
+    <string name="button_scan">扫描设备</string>
+    <string name="qianzi">签字</string>
+
+    <!-- shezhi.xml -->
+    <string name="tvDeviceText">设备连接状态:</string>
+    <string name="btnSelectDeviceText">设置连接方式</string>
+    <string name="btnSaveText">保存</string>
+    <string name="btnReturnText">返回</string>
+    <string name="tvSavedDeviceAddressText">上次连接设备:</string>
+    <string name="tvSavedDeviceAddressText1">无</string>
+    <string name="btnConnectDeviceText">连接此设备</string>
+    <string name="_chkLanYa">蓝牙设备连接</string>
+    <string name="_chkWiFi">网络设备连接</string>
+    <string name="_chkUSB">USB设备连接</string>
+    <string name="btnGaoJiText">高级</string>
+    <string name="txtLanYaZhuangTaiText">未连接</string>
+
+    <!-- 设置 -->
+    <string name="tvLanYaZhuangTaiText">连接设备：</string>
+    <string name="inputbtmachint">在此输入蓝牙地址，形如01:23:45:67:89:AB</string>
+    <string name="connectbtmacaddress">连接指定蓝牙打印机</string>
+    <string name="ip">IP</string>
+    <string name="port">Port</string>
+    <string name="connect">连接</string>
+    <string name="search">搜索</string>
+    <string name="_lianjiepeiduilanyashebei">  连接已配对蓝牙设备</string>
+    <string name="_sousuolanyashebei">  搜索并连接蓝牙设备</string>
+    <string name="_lianjiewangluoshebei">  连接网络设备</string>
+    <string name="_lianjieusbshebei">  连接USB设备</string>
+    <string name="_lianjieusbshebei_cong">  连接USB设备(作为从设备)</string>
+    <string name="btnCloseText">关闭</string>
+
+    <string name="_denglu">登  录</string>
+    <string name="blcpy_string1">当前病例</string>
+    <string name="blcpy_string2">营养代谢以及体液失衡</string>
+    <string name="blcpy_string3">正在运行</string>
+    <string name="v1_1_0">V1.1.0</string>
+    <string name="str_bllb">病例列表</string>
+    <string name="text_xm">姓名：</string>
+    <string name="str_blzg">病例转归</string>
+    <string name="str_xunlian">训练</string>
+    <!--主页-->
+    <string name="nurse_name">护士姓名：</string>
+    <string name="sick_messge">核对病人信息</string>
+    <string name="drug_messge">核对药物信息</string>
+    <string name="name">姓名：</string>
+    <string name="sex">性别：</string>
+    <string name="age">年龄：</string>
+    <string name="marriage">婚否：</string>
+    <string name="hospitalNumber">住院号：</string>
+    <string name="bedNumber">床号：</string>
+    <string name="office">科室：</string>
+    <string name="allergies">过敏史：</string>
+    <string name="diagnose">诊断：</string>
+    <string name="yesconnect">已连接</string>
+    <string name="injectionlist_text">注射单</string>
+    <string name="curelist_text">治疗单</string>
+    <string name="takemedicinelist_text">服药单</string>
+    <string name="transfusionlist_text">输液单</string>
+    <string name="medicalordersexecutive_text">医嘱执行单</string>
+    <string name="bloodrecordlist_text">输血观察记录单</string>
+    <string name="transfusionrecord_text">输液记录单</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="about">关于</string>
+
+
+    <!--注射单-->
+    <string name="injection_toast">此页已满</string>
+
+
+    <!-- DeviceListActivity -->
+
+    <!-- shezhi.xml -->
+    <string name="set_connent">设置>设置连接方式</string>
+    <string name="set_bluetooth">设置>设置连接方式>搜索并连接蓝牙设备</string>
+    <string name="set_alredy_bluetooth">设置>设置连接方式>连接已配对蓝牙设备</string>
+    <string name="set_network">设置>设置连接方式>连接网络设备</string>
+    <string name="set_about">设置>关于</string>
+    <string name="qianzi_faile">签字失败</string>
+
+    <string name="now_times">当前系统时区：</string>
+    <string name="your_times">标准中时区：</string>
+    <!-- 设置 -->
+    <string name="rectime">状态改变时间</string>
+    <string name="rectype">状态改变类型</string>
+    <string name="recblmc">状态改变病例名称</string>
+    <string name="blzg_title">病例转归</string>
+    <string name="string_close">关闭</string>
+    <string name="hr">HR(心率)</string>
+    <string name="PP">PP(呼吸率)</string>
+    <string name="NBP">NBP(血压)</string>
+    <string name="PR">PR(脉率)</string>
+    <string name="SPO">SPO2(血氧)</string>
+    <string name="T">T(体温)</string>
+    <string name="_150_100_mmhg">150/100 mmHg</string>
+    <string name="序号">序号</string>
+    <string name="遗嘱内容">遗嘱内容</string>
+    <string name="跳转">跳转</string>
+    <string name="医嘱内容">医嘱内容</string>
+    <string name="出口状态">出口状态</string>
+    <string name="出口概率">出口概率</string>
+    <string name="婚姻状况">婚姻状况：</string>
+    <string name="职业">职业：</string>
+    <string name="电话">电话：</string>
+    <string name="住址">住址：</string>
+    <string name="主诉">主诉</string>
+    <string name="todo">TODO</string>
+    <string name="训练">训练</string>
+    <string name="现病史">现病史</string>
+    <string name="病例选择">病例选择</string>
+    <string name="病例详情">病例详情</string>
+    <string name="个人信息">个人信息</string>
+    <string name="病例名称">病例名称</string>
+    <string name="病例运行时间">病例运行时间:00:00:00</string>
+    <string name="状态运行时间">状态运行时间:00:00:00</string>
+    <string name="病例内容">病历内容</string>
+    <string name="学生操作记录">学生操作记录</string>
+    <string name="_1_2">1/2</string>
+    <string name="tixing">提醒</string>
+</resources>

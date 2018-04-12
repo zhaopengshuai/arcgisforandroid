@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/point"
+        android:title="Point"/>
+    <item
+        android:id="@+id/envelope"
+        android:title="Envelope"/>
+    <item
+        android:id="@+id/polyline"
+        android:title="Polyline"/>
+    <item
+        android:id="@+id/polygon"
+        android:title="Polygon"/>
+    <item
+        android:id="@+id/freehandpolygon"
+        android:title="Freehand Polygon"/>
+    <item
+        android:id="@+id/freehandpolyline"
+        android:title="Freehand Polyline"/>
+    <item
+        android:id="@+id/circle"
+        android:title="Circle"/>
+    <item
+        android:id="@+id/clear"
+        android:title="清除"/>
+
+</menu>

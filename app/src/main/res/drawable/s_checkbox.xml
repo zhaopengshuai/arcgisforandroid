@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- checked=false -->
+    <item android:drawable="@drawable/dxk_d"  android:state_checked="false"/>
+    <!-- checked=true -->
+    <item android:drawable="@drawable/dxk_p"  android:state_checked="true" />
+    <!-- 默认时 -->
+    <item android:drawable="@drawable/dxk_n"/>
+
+</selector>

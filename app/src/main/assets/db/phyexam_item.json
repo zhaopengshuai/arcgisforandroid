@@ -1,0 +1,1987 @@
+{
+  "juchengesp": {
+    "physical": [
+      {
+        "name": "基本生命体征",
+        "partid": 1,
+        "item": [
+          {
+            "id": 1,
+            "name": "体温",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 36.5
+            }
+          },
+          {
+            "id": 2,
+            "name": "脉搏",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 80
+            }
+          },
+          {
+            "id": 3,
+            "name": "呼吸",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 18
+            }
+          },
+          {
+            "id": 4,
+            "name": "舒张压",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 80
+            }
+          },
+          {
+            "id": 5,
+            "name": "收缩压",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 120
+            }
+          },
+          {
+            "id": 6,
+            "name": "心率",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 80
+            }
+          }
+        ]
+      },
+      {
+        "name": "头颈部",
+        "partid": 2,
+        "item": [
+          {
+            "id": 124,
+            "name": "眼睑水肿",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 125,
+            "name": "巩膜黄染",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [                
+                {
+                  "valuemin": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "巩膜黄染"
+                }
+              ]
+            }
+          },
+          {
+            "id": 126,
+            "name": "眼球突出",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 127,
+            "name": "压眶反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 138,
+            "name": "眼底出血",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 48,
+            "name": "左眼半睁",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "睁眼"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "半睁半闭"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "闭眼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 49,
+            "name": "左眼眨眼频率",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 15
+            }
+          },
+          {
+            "id": 50,
+            "name": "左眼瞳孔直径",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 3
+            }
+          },
+          {
+            "id": 51,
+            "name": "左眼直接对光反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有直接对光反射"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无直接对光反射"
+                }
+              ]
+            }
+          },
+          {
+            "id": 52,
+            "name": "左眼间接对光反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有间接对光反射"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无间接对光反射"
+                }
+              ]
+            }
+          },
+          {
+            "id": 53,
+            "name": "左眼眼底疾病",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "糖尿病"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "高血压"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "慢性肾小球炎"
+                },
+                {
+                  "valuemin": 5,
+                  "describe": "感染性心内膜炎"
+                },
+                {
+                  "valuemin": 6,
+                  "describe": "白血病"
+                },
+                {
+                  "valuemin": 7,
+                  "describe": "妊娠高血压综合征"
+                }
+              ]
+            }
+          },
+          {
+            "id": 54,
+            "name": "右眼半睁",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "睁眼"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "半睁半闭"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "闭眼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 55,
+            "name": "右眼眨眼频率",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 15
+            }
+          },
+          {
+            "id": 56,
+            "name": "右眼瞳孔直径",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 3
+            }
+          },
+          {
+            "id": 57,
+            "name": "右眼直接对光反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有直接对光反射"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无直接对光反射"
+                }
+              ]
+            }
+          },
+          {
+            "id": 58,
+            "name": "右眼间接对光反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有间接对光反射"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无间接对光反射"
+                }
+              ]
+            }
+          },
+          {
+            "id": 59,
+            "name": "右眼眼底疾病",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "糖尿病"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "高血压"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "慢性肾小球炎"
+                },
+                {
+                  "valuemin": 5,
+                  "describe": "感染性心内膜炎"
+                },
+                {
+                  "valuemin": 6,
+                  "describe": "白血病"
+                },
+                {
+                  "valuemin": 7,
+                  "describe": "妊娠高血压综合征"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "胸肺部",
+        "partid": 3,
+        "item": [
+          {
+            "id": 40,
+            "name": "呼吸波形",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\breath\\匀速呼吸\\#-10\\1.bmp"
+              ]
+            }
+          },
+          {
+            "id": 43,
+            "name": "呼吸节律",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "textvalue": [
+                "匀速呼吸"
+              ]
+            }
+          },
+          {
+            "id": 60,
+            "name": "左胸呼吸动度",
+            "describe": "xxxx",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 3,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "不动"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "弱"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "中"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "强"
+                }
+              ]
+            }
+          },
+          {
+            "id": 61,
+            "name": "右胸呼吸动度",
+            "describe": "xxxx",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 3,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "不动"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "弱"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "中"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "强"
+                }
+              ]
+            }
+          },
+          {
+            "id": 93,
+            "name": "右肺上",
+            "describe": "区域1肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 94,
+            "name": "右肺下",
+            "describe": "区域2肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 95,
+            "name": "右肺中",
+            "describe": "区域3肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 96,
+            "name": "右肺腋下",
+            "describe": "区域4肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 97,
+            "name": "左肺上",
+            "describe": "区域5肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 98,
+            "name": "左肺下",
+            "describe": "区域6肺部",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 99,
+            "name": "左肺中",
+            "describe": "区域2心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          },
+          {
+            "id": 100,
+            "name": "左肺腋下",
+            "describe": "区域2心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\breath\\匀速呼吸\\#-18\\sound\\肺泡呼吸音.wav"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "心脏",
+        "partid": 4,
+        "item": [
+          {
+            "id": 25,
+            "name": "心电图1导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\1.bmp"
+              ]
+            }
+          },
+          {
+            "id": 26,
+            "name": "心电图2导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\2.bmp"
+              ]
+            }
+          },
+          {
+            "id": 27,
+            "name": "心电图3导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\3.bmp"
+              ]
+            }
+          },
+          {
+            "id": 28,
+            "name": "心电图4导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\avr.bmp"
+              ]
+            }
+          },
+          {
+            "id": 29,
+            "name": "心电图5导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\avl.bmp"
+              ]
+            }
+          },
+          {
+            "id": 30,
+            "name": "心电图6导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\avf.bmp"
+              ]
+            }
+          },
+          {
+            "id": 31,
+            "name": "心电图7导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v1.bmp"
+              ]
+            }
+          },
+          {
+            "id": 32,
+            "name": "心电图8导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v2.bmp"
+              ]
+            }
+          },
+          {
+            "id": 33,
+            "name": "心电图9导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v3.bmp"
+              ]
+            }
+          },
+          {
+            "id": 34,
+            "name": "心电图10导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v4.bmp"
+              ]
+            }
+          },
+          {
+            "id": 35,
+            "name": "心电图11导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v5.bmp"
+              ]
+            }
+          },
+          {
+            "id": 36,
+            "name": "心电图12导联",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\v6.bmp"
+              ]
+            }
+          },
+          {
+            "id": 39,
+            "name": "脉搏波形",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\pluse\\1.bmp"
+              ]
+            }
+          },
+          {
+            "id": 41,
+            "name": "血压波形",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "wavevalue": [
+                "路径1"
+              ]
+            }
+          },
+          {
+            "id": 42,
+            "name": "心脏节律",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "textvalue": [
+                "节律类型-心梗",
+                "节律-心梗1"
+              ]
+            }
+          },
+          {
+            "id": 88,
+            "name": "二尖瓣听诊区听诊音听诊音听诊音",
+            "describe": "区域1心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\sound\\窦性心电图-二尖瓣听诊区听诊音听诊音听诊音.wav"
+              ]
+            }
+          },
+          {
+            "id": 89,
+            "name": "肺动脉瓣听诊区听诊音",
+            "describe": "区域2心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\sound\\窦性心电图-肺动脉瓣听诊区听诊音.wav"
+              ]
+            }
+          },
+          {
+            "id": 90,
+            "name": "主动脉瓣听诊区听诊音",
+            "describe": "区域3心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\sound\\窦性心电图-主动脉瓣听诊区听诊音.wav"
+              ]
+            }
+          },
+          {
+            "id": 91,
+            "name": "主动脉瓣第二听诊区听诊音",
+            "describe": "区域4心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\sound\\窦性心电图-主动脉瓣第二听诊区听诊音.wav"
+              ]
+            }
+          },
+          {
+            "id": 92,
+            "name": "三尖瓣听诊区听诊音",
+            "describe": "区域5心音",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\ecg\\窦性心律\\窦性心电图\\#-80\\sound\\窦性心电图-三尖瓣听诊区听诊音.wav"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "腹部",
+        "partid": 5,
+        "item": [
+          {
+            "id": 62,
+            "name": "呼吸模式",
+            "describe": "xxxx",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "胸式呼吸"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "腹式呼吸"
+                }
+              ]
+            }
+          },
+          {
+            "id": 63,
+            "name": "胃",
+            "describe": "压痛点1",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 64,
+            "name": "胰腺",
+            "describe": "压痛点2",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 65,
+            "name": "右附件",
+            "describe": "压痛点3",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 66,
+            "name": "下附件",
+            "describe": "压痛点4",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 67,
+            "name": "左附件",
+            "describe": "压痛点5",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 68,
+            "name": "小肠",
+            "describe": "压痛点6",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 69,
+            "name": "左中输尿管",
+            "describe": "压痛点7",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 70,
+            "name": "右中输尿管",
+            "describe": "压痛点8",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 71,
+            "name": "麦氏点",
+            "describe": "压痛点9",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 72,
+            "name": "右上输尿管",
+            "describe": "压痛点10",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 73,
+            "name": "左上输尿管",
+            "describe": "压痛点11",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 74,
+            "name": "左季肋",
+            "describe": "压痛点12",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 75,
+            "name": "胆囊",
+            "describe": "压痛点13",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "不疼"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "疼"
+                }
+              ]
+            }
+          },
+          {
+            "id": 101,
+            "name": "右上腹部",
+            "describe": "腹部区域1",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\abdomen\\Sound\\cmy_zc.wav"
+              ]
+            }
+          },
+          {
+            "id": 102,
+            "name": "右下腹部",
+            "describe": "腹部区域2",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\abdomen\\Sound\\cmy_zc.wav"
+              ]
+            }
+          },
+          {
+            "id": 103,
+            "name": "左上腹部",
+            "describe": "腹部区域3",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\abdomen\\Sound\\cmy_zc.wav"
+              ]
+            }
+          },
+          {
+            "id": 104,
+            "name": "左下腹部",
+            "describe": "腹部区域4",
+            "valuetype": 9,
+            "stringvalue": {
+              "audiovalue": [
+                ".\\abdomen\\Sound\\cmy_zc.wav"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "其他",
+        "partid": 6,
+        "item": [
+          {
+            "id": 14,
+            "name": "血氧饱和度",
+            "describe": "",
+            "valuetype": 1,
+            "numbervalue": {
+              "range": {
+                "min": 0,
+                "max": 9999
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 9999
+              },
+              "defaultvalue": 100
+            }
+          },
+          {
+            "id": 15,
+            "name": "疼痛",
+            "describe": "",
+            "valuetype": 2,
+            "numberextentvalue": {
+              "range": {
+                "min": 0,
+                "max": 100
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 100
+              },
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "valuemax": 1,
+                  "describe": "平静"
+                },
+                {
+                  "valuemin": 2,
+                  "valuemax": 20,
+                  "describe": "轻度疼痛"
+                },
+                {
+                  "valuemin": 21,
+                  "valuemax": 40,
+                  "describe": "中度疼痛"
+                },
+                {
+                  "valuemin": 41,
+                  "valuemax": 60,
+                  "describe": "重度疼痛"
+                },
+                {
+                  "valuemin": 61,
+                  "valuemax": 80,
+                  "describe": "极重度疼痛"
+                },
+                {
+                  "valuemin": 81,
+                  "valuemax": 100,
+                  "describe": "危重度疼痛"
+                }
+              ]
+            }
+          },
+          {
+            "id": 16,
+            "name": "紫绀",
+            "describe": "",
+            "valuetype": 2,
+            "numberextentvalue": {
+              "range": {
+                "min": 0,
+                "max": 100
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 100
+              },
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "valuemax": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "valuemax": 33,
+                  "describe": "轻度发绀"
+                },
+                {
+                  "valuemin": 34,
+                  "valuemax": 67,
+                  "describe": "中度发绀"
+                },
+                {
+                  "valuemin": 68,
+                  "valuemax": 100,
+                  "describe": "重度发绀"
+                }
+              ]
+            }
+          },        
+          {
+            "id": 18,
+            "name": "出汗",
+            "describe": "",
+            "valuetype": 2,
+            "numberextentvalue": {
+              "range": {
+                "min": 0,
+                "max": 100
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 100
+              },
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "valuemax": 1,
+                  "describe": "无汗"
+                },
+                {
+                  "valuemin": 2,
+                  "valuemax": 34,
+                  "describe": "轻度出汗"
+                },
+                {
+                  "valuemin": 35,
+                  "valuemax": 67,
+                  "describe": "中度出汗"
+                },
+                {
+                  "valuemin": 68,
+                  "valuemax": 100,
+                  "describe": "重度出汗"
+                }
+              ]
+            }
+          },         
+          {
+            "id": 22,
+            "name": "咳嗽",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无咳嗽"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "咳嗽"
+                }
+              ]
+            }
+          },
+          {
+            "id": 112,
+            "name": "左跖反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                }
+              ]
+            }
+          },
+          {
+            "id": 114,
+            "name": "右跖反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 1,
+              "extentrange": [
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                },
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                }
+              ]
+            }
+          },
+          {
+            "id": 113,
+            "name": "左巴彬斯基征",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 115,
+            "name": "右巴彬斯基征",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 79,
+            "name": "全身出汗",
+            "describe": "",
+            "valuetype": 2,
+            "numberextentvalue": {
+              "range": {
+                "min": 0,
+                "max": 100
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 100
+              },
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "valuemax": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "valuemax": 34,
+                  "describe": "轻度出汗"
+                },
+                {
+                  "valuemin": 35,
+                  "valuemax": 67,
+                  "describe": "中度发汗"
+                },
+                {
+                  "valuemin": 68,
+                  "valuemax": 100,
+                  "describe": "重度发汗"
+                }
+              ]
+            }
+          },
+          {
+            "id": 80,
+            "name": "肌肉颤动",
+            "describe": "",
+            "valuetype": 2,
+            "numberextentvalue": {
+              "range": {
+                "min": 0,
+                "max": 100
+              },
+              "normalrange": {
+                "normalmin": 0,
+                "normalmax": 100
+              },
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "valuemax": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "valuemax": 34,
+                  "describe": "轻度震颤"
+                },
+                {
+                  "valuemin": 35,
+                  "valuemax": 67,
+                  "describe": "中度震颤"
+                },
+                {
+                  "valuemin": 68,
+                  "valuemax": 100,
+                  "describe": "重度震颤"
+                }
+              ]
+            }
+          },         
+          {
+            "id": 110,
+            "name": "膝反射",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 201,
+            "name": "文字描述",
+            "describe": "",
+            "valuetype": 9,
+            "stringvalue": {
+              "textvalue": [
+                "无"
+              ]
+            }
+          },
+          {
+            "id": 116,
+            "name": "痰",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [              
+                {
+                  "valuemin": 1,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "粉红泡沫痰"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "黄色浓痰"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "铁锈色痰"
+                },
+                {
+                  "valuemin": 5,
+                  "describe": "黄绿色痰"
+                },
+                {
+                  "valuemin": 6,
+                  "describe": "白色浓痰"
+                }
+              ]
+            }
+          },
+          {
+            "id": 117,
+            "name": "面部表情",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "平淡"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "昏迷"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "寒战"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "惊厥"
+                },
+                {
+                  "valuemin": 5,
+                  "describe": "恶心"
+                },
+                {
+                  "valuemin": 6,
+                  "describe": "焦虑"
+                },
+                {
+                  "valuemin": 7,
+                  "describe": "坐卧不安"
+                }
+              ]
+            }
+          },
+          {
+            "id": 118,
+            "name": "面色",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "面色苍白"
+                }
+              ]
+            }
+          },
+          {
+            "id": 119,
+            "name": "颜面水肿",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 120,
+            "name": "嗳气",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 121,
+            "name": "其他皮肤颜色",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "皮肤瘀斑"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "皮肤瘀点"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "黄疸"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "前胸下肢皮肤出血点"
+                },
+                {
+                  "valuemin": 5,
+                  "describe": "皮疹"
+                },
+                {
+                  "valuemin": 6,
+                  "describe": "溃疡"
+                },
+                {
+                  "valuemin": 7,
+                  "describe": "甲床瘀斑"
+                },
+                {
+                  "valuemin": 8,
+                  "describe": "甲床淤点"
+                },
+                {
+                  "valuemin": 9,
+                  "describe": "全身发红"
+                }
+              ]
+            }
+          },
+          {
+            "id": 122,
+            "name": "鼻腔出血",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 123,
+            "name": "鼻扇征",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 128,
+            "name": "嘴唇颜色",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "口唇苍白"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "口唇发绀"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "口唇樱桃红"
+                }
+              ]
+            }
+          },
+          {
+            "id": 129,
+            "name": "咯血",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 130,
+            "name": "呕吐物颜色",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "胃内容物"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "咖啡样液"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "鲜红色液"
+                }
+              ]
+            }
+          },
+          {
+            "id": 131,
+            "name": "呼吸动画",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "正常"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "呼吸困难"
+                },
+                {
+                  "valuemin": 2,
+                  "describe": "潮式呼吸"
+                },
+                {
+                  "valuemin": 3,
+                  "describe": "深度呼吸"
+                },
+                {
+                  "valuemin": 4,
+                  "describe": "呼吸浅快"
+                }
+              ]
+            }
+          },
+          {
+            "id": 132,
+            "name": "腹胀",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 133,
+            "name": "腹水按压水肿",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 134,
+            "name": "腿部水肿",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 135,
+            "name": "双足趾红肿",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 136,
+            "name": "手指发绀",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          },
+          {
+            "id": 137,
+            "name": "杵状指",
+            "describe": "",
+            "valuetype": 3,
+            "extentvalue": {
+              "defaultvalue": 0,
+              "extentrange": [
+                {
+                  "valuemin": 0,
+                  "describe": "无"
+                },
+                {
+                  "valuemin": 1,
+                  "describe": "有"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

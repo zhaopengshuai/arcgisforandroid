@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="touming">#00000000</color>
+    <color name="baise">#ffffff</color>
+    <color name="heise">#000000</color>
+    <color name="red">#ff0000</color>
+    <color name="bg_white">#f4fbfe</color>
+    <color name="bg_txt_color">#377ecf</color>
+    <color name="bg_txtbtn_go">#f2984c</color>
+    <color name="bg_txtbtn_cut">#377ecf</color>
+    <color name="bg_bgcolor1">#e4f0f9</color>
+    <color name="bg_bgcolor2">#f4fbfe</color>
+    <color name="bg_bgcolor3">#d2dfea</color>
+    <color name="divid_color">#93bee6</color>
+    <color name="banner_bg_color">#bdd8f4</color>
+    <color name="banner_txt_color">#386eb6</color>
+    <color name="divid_line">#91bee6</color>
+    <color name="version">#324658</color>
+    <!-- 195.207.223 -->
+    <color name="btnSheZhi">#c3cfdf</color>
+    <color name="vfrontc">#468be7</color>
+    <!-- 171.204.237 -->
+    <color name="tvSheZhi_lan">#abcced</color>
+    <!-- 59.126.134 -->
+    <color name="tvJiaoXue_neirong">#3b7e86</color>
+    <color name="btn_color_blue">#468ce7</color>
+    <!-- 195.207.223 -->
+
+    <color name="black_333">#333333</color>
+    <!-- 背景颜色 -->
+    <color name="form_bac">#d1deea</color>
+    <!-- 按钮字体颜色 -->
+    <color name="btn_text">#254278</color>
+    <!-- 登录页面输入内容字体颜色 -->
+    <color name="denglu">#56bbe0</color>
+    <!-- 登录按钮字体颜色 -->
+    <color name="btnLogin_text">#b4d0e6</color>
+    <!-- 欢迎页字体颜色 -->
+    <color name="welcome_text">#468be7</color>
+    <!-- 主页字体颜色 -->
+    <color name="page_text">#386eb6</color>
+    <!-- 病人信息按钮颜色 -->
+    <color name="sick_bton">#f3974b</color>
+
+    <!--半透明-->
+    <color name="bantouming">#50000000</color>
+
+    <!-- 药物信息按钮颜色 -->
+    <color name="drug_bton">#468be7</color>
+    <!-- 文字背景颜色 -->
+    <color name="textbackground_bton">#e4effa</color>
+    <!-- 设置和已连接布局背景颜色 -->
+    <color name="setbackground_bton">#e4f0f9</color>
+    <!-- 边距背景颜色 -->
+    <color name="margnbackground_bton">#d2dfea</color>
+    <!-- 竖边距线颜色 -->
+    <color name="margnline">#93bee4</color>
+    <!-- fragment按钮布局背景颜色 -->
+    <color name="fragmentbuton">#f5fcff</color>
+    <!-- 药物信息弹出框颜色 -->
+    <color name="ywmessage">#f4fbfe</color>
+    <!-- 药物信息弹出框文字颜色 -->
+    <color name="ywtextmessage">#377ecf</color>
+    <!-- 灰色按钮颜色 -->
+    <color name="gray">#b5c4d2</color>
+    <!-- 橙色按钮颜色 -->
+    <color name="orange">#f2984c</color>
+    <!-- 输入框描边颜色 -->
+    <color name="edtext_bg">#c8e4ff</color>
+
+    <color name="color1">#FFFFFF</color>
+    <color name="color2">#666666</color>
+    <color name="color3">#D0D0D0</color>
+    <color name="color4">#F6F6F6</color>
+    <color name="color13">#F9974E</color>
+    <color name="color14">#59B29C</color>
+    <color name="color25">#ED5564</color>
+    <color name="color26">#D7D8DC</color>
+
+    <color name="color_lightblue">#9cbbdc</color>
+</resources>

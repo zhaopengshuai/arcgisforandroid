@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Client>
+	<EntityName>entity1</EntityName>
+	<EntityAddrCode>000002</EntityAddrCode>
+	<IPAddr>92.168.2.140</IPAddr>
+	<Port>35966</Port>
+</Client>

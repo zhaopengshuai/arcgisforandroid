@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@color/touming"
+    tools:ignore="ResAuto">
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/baise"
+            android:orientation="vertical">
+            <!--设置-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/x120"
+                android:background="@color/setbackground_bton"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/x15"
+                    android:src="@drawable/sz" />
+                <TextView
+                    android:layout_marginLeft="@dimen/x15"
+                    android:id="@+id/back_network"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/set_network"
+                    android:textColor="@color/drug_bton"
+                    android:textSize="@dimen/text_size20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/x500"
+                android:layout_marginTop="@dimen/x260"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="@color/ywmessage"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/x60"
+                        android:layout_marginLeft="@dimen/x140"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="@dimen/x260"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="地址编码"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+                        <EditText
+                            android:id="@+id/editTextInputClientAddr"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x140"
+                            android:paddingLeft="@dimen/x15"
+                            android:paddingRight="@dimen/x15"
+                            android:background="@drawable/bg_edittext_normal"
+                            android:gravity="center_vertical"
+                            android:inputType="text"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/x60"
+                        android:layout_marginLeft="@dimen/x140"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="@dimen/x260"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/ip"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+                        <EditText
+                            android:id="@+id/editTextInputIp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/x15"
+                            android:paddingRight="@dimen/x15"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x140"
+                            android:background="@drawable/bg_edittext_normal"
+                            android:gravity="center_vertical"
+                            android:inputType="text"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_marginTop="@dimen/x60"
+                        android:layout_marginLeft="@dimen/x140"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <TextView
+                            android:layout_width="@dimen/x260"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/port"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+
+
+                        <EditText
+                            android:id="@+id/editTextInputPort"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="@dimen/x15"
+                            android:paddingRight="@dimen/x15"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:layout_marginRight="@dimen/x140"
+                            android:background="@drawable/bg_edittext_normal"
+                            android:gravity="center_vertical"
+                            android:inputType="text"
+                            android:textColor="@color/drug_bton"
+                            android:textSize="@dimen/text_size20" />
+
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="@dimen/x200"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/buttonConnectIP"
+                    android:layout_width="@dimen/x240"
+                    android:layout_height="fill_parent"
+                    android:background="@color/drug_bton"
+                    android:text="@string/connect"
+                    android:gravity="center"
+                    android:textColor="@color/baise"
+                    android:textSize="@dimen/text_size20"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
