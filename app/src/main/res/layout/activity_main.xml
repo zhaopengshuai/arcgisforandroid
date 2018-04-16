@@ -35,13 +35,22 @@
             android:layout_marginTop="@dimen/x80"
             android:text="显示轨迹"
             tools:ignore="HardcodedText" />
+
+        <CheckBox
+            android:id="@+id/chkbox_Corer"
+            android:checked="false"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/x150"
+            android:text="障碍物"
+            tools:ignore="HardcodedText" />
         <TextView
             android:id="@+id/tvRouteNews"
             android:layout_width="@dimen/x400"
             android:layout_height="@dimen/x80"
             android:layout_marginLeft="@dimen/x30"
             android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/x160"
+            android:layout_marginTop="@dimen/x220"
             android:text="机动路线历史记录"
             android:textColor="#000"
             tools:ignore="HardcodedText" />
@@ -86,8 +95,8 @@
 
         <ImageView
             android:id="@+id/iv_connnect"
-            android:layout_width="@dimen/x120"
-            android:layout_height="@dimen/x120"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:src="@drawable/btn_lj_p"
             android:textSize="@dimen/text_size18"

@@ -11,18 +11,27 @@ import android.provider.BaseColumns;
 public  final  class DateSheet {
     private DateSheet(){}
 
-    //轨迹经纬度保存
+    //轨迹经纬度
     public  static  abstract class poistion implements BaseColumns {
         public static  final String TABLE_NAME="poistion";
         public static  final String POISTION_X="poistion_x";
         public static  final String POISTION_Y="poistion_y";
     }
 
-    //机动路线信息保存
+    //机动路线信息
     public static abstract class routeNews implements BaseColumns {
         public static  final String TABLE_NAME="routeNews";
         public static  final String POISTION="poistion";
         public static  final String STARTTIME="startTime";
+    }
+
+    //障碍物坐标
+    public static abstract class markCorer implements BaseColumns {
+        public static  final String TABLE_NAME="markCorer";
+        public static  final String START="start";
+        public static  final String TYPE="type";
+        public static  final String POISTION_X="poistion_x";
+        public static  final String POISTION_Y="poistion_y";
     }
 
 }

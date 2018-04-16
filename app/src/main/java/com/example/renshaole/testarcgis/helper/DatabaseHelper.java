@@ -12,8 +12,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "news.db";
     private static final int VERSION = 1;   //版本号
-    private static final String CREATE_TABLE_POISTION = "CREATE TABLE poistion(_id INTEGER PRIMARY KEY AUTOINCREMENT," + "poistion_x TEXT,poistion_y TEXT)";  //创建表
-    private static final String CREATE_TABLE_ROUTENEWS= "CREATE TABLE routeNews(_id INTEGER PRIMARY KEY AUTOINCREMENT," +"poistion TEXT,startTime TEXT)";  //创建表
+    private static final String CREATE_TABLE_POISTION = "CREATE TABLE poistion(_id INTEGER PRIMARY KEY AUTOINCREMENT," + "poistion_x TEXT,poistion_y TEXT)";  //轨迹经纬度表
+    private static final String CREATE_TABLE_ROUTENEWS= "CREATE TABLE routeNews(_id INTEGER PRIMARY KEY AUTOINCREMENT," +"poistion TEXT,startTime TEXT)";  //机动路线信息表
+    private static final String CREATE_TABLE_MARKCORER= "CREATE TABLE markCorer(_id INTEGER PRIMARY KEY AUTOINCREMENT," +"start TEXT,type TEXT,poistion_x TEXT,poistion_y TEXT)";  //障碍物坐标表
 
     public DatabaseHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
@@ -25,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //SQLiteDatabase 用于操作数据库的工具类
         sqLiteDatabase.execSQL(CREATE_TABLE_POISTION);
         sqLiteDatabase.execSQL(CREATE_TABLE_ROUTENEWS);
+        sqLiteDatabase.execSQL(CREATE_TABLE_MARKCORER);
 
     }
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -36,7 +37,9 @@ import com.esri.android.map.GraphicsLayer;
 import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
+import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
 import com.esri.android.map.event.OnZoomListener;
+import com.esri.android.runtime.ArcGISRuntime;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
@@ -49,6 +52,7 @@ import com.esri.core.symbol.PictureMarkerSymbol;
 import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
+import com.example.renshaole.testarcgis.bean.MarkCorerBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
 import com.example.renshaole.testarcgis.bean.ScaleBean;
 import com.example.renshaole.testarcgis.decoding.DecodingLibrary;
@@ -57,6 +61,7 @@ import com.example.renshaole.testarcgis.helper.DatabaseOperation;
 import com.example.renshaole.testarcgis.pop.ConfirmDialogPopWindow;
 import com.example.renshaole.testarcgis.utils.BeanUtil;
 import com.example.renshaole.testarcgis.utils.SPUtils;
+import com.example.renshaole.testarcgis.utils.util;
 import com.example.renshaole.testarcgis.widget.Entity;
 import com.example.renshaole.testarcgis.widget.MyMessage;
 
@@ -80,6 +85,8 @@ import java.util.TimerTask;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
+import static com.example.renshaole.testarcgis.utils.util.CORER_ZHUANGZHAI;
 
 
 public class MainActivity extends AdaptationActivity implements DrawEventListener {
@@ -107,6 +114,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     TextView tvRouteNews;
     ImageView iv_connect;
     GraphicsLayer gLayerPos;
+    GraphicsLayer markCover;
     GraphicsLayer gCurrentLayerPos;
     GraphicsLayer line;
     PictureMarkerSymbol locationSymbol;
@@ -131,6 +139,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     boolean isSelected=true;
     private  App app;
    private ConfirmDialogPopWindow confirmDialogPopWindow;
+    private PictureMarkerSymbol pictureMarkerSymbol;
+    private  List<MarkCorerBean> markCorerBeanList;
+    private CheckBox chkbox_Corer;
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint({"MissingPermission", "HandlerLeak"})
     @Override
@@ -187,11 +199,18 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         tvY=findViewById(R.id.tvY);
         tvRouteNews=findViewById(R.id.tvRouteNews);
         chk_isfollow = this.findViewById(R.id.chkbox_isFollow);
+        chkbox_Corer = this.findViewById(R.id.chkbox_Corer);
         chkbox_isGuiJi = this.findViewById(R.id.chkbox_isGuiJi);
         chkbox_isLookGuiJi = this.findViewById(R.id.chkbox_isLookGuiJi);
         GPS_btn = findViewById(R.id.GPS_btn);
         mapView = this.findViewById(R.id.map);
 
+//        MarkCorerBean markCorerBean =new MarkCorerBean();
+//        markCorerBean.setStart("1");
+//        markCorerBean.setType("10");
+//        markCorerBean.setPoistion_x(114.46469);
+//        markCorerBean.setPoistion_y(38.0075);
+//        databaseOperation.addmarkCorer(markCorerBean);
         tvRouteNews.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -209,16 +228,16 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         });
         //在线地图
         //String strMapUrl="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer";
-//        String strMapUrl = "http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer";
-//        ArcGISTiledMapServiceLayer arcGISTiledMapServiceLayer = new ArcGISTiledMapServiceLayer(strMapUrl);
-//        this.mapView.addLayer(arcGISTiledMapServiceLayer);
-//        ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
+        String strMapUrl = "http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer";
+        ArcGISTiledMapServiceLayer arcGISTiledMapServiceLayer = new ArcGISTiledMapServiceLayer(strMapUrl);
+        this.mapView.addLayer(arcGISTiledMapServiceLayer);
+        ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
         if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
             //离线地图
-            String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
-            ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
-            this.mapView.addLayer(tLayer);
-            this.mapView.addLayer(new GraphicsLayer());
+//            String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
+//            ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
+//            this.mapView.addLayer(tLayer);
+//            this.mapView.addLayer(new GraphicsLayer());
             locationDisplayManager =  mapView.getLocationDisplayManager();//获取定位类
             locationDisplayManager.setShowLocation(true);
             locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈
@@ -260,15 +279,16 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
         gLayerPos = new GraphicsLayer();
         mapView.addLayer(gLayerPos);
+        markCover = new GraphicsLayer();
+        mapView.addLayer(markCover);
 
         gCurrentLayerPos = new GraphicsLayer();
         mapView.addLayer(gCurrentLayerPos);
         line = new GraphicsLayer();
         mapView.addLayer(line);
         locationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.location));
-        currentLocationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark));
+        currentLocationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.mipmap.ic_launcher));
         locMag = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
 
         GPS_btn.setOnClickListener(new OnClickListener() {
             @SuppressLint("MissingPermission")
@@ -276,54 +296,11 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 // TODO Auto-generated method stub
                 locationDisplayManager.setAutoPanMode(LocationDisplayManager.AutoPanMode.LOCATION);//设置模式
                 locationDisplayManager.start();
-//                final List<String> providers = locMag.getProviders(true);
-//                for (final String provider : providers) {
-//                    if (provider.equals("gps")) {
-//                    loc = locMag.getLastKnownLocation(provider);
-//                    LocationListener locationListener = new LocationListener() {
-//                        public void onLocationChanged(Location location) {
-//                            String locStr = getCurrentLocation(location);
-//                            MyMessage.MSG_ENTITYLOCXY = locStr;
-//                            //MyMessage.MSG_BEIAN =  MyMessage.MSG_BEIAN.replace("{0}",locStr);
-//                            currentMarkLocation(location);
-//                            drawOtherMarks();
-//                        }
-//                        public void onProviderDisabled(String arg0) {
-//                        }
-//
-//                        public void onProviderEnabled(String arg0) {
-//                        }
-//
-//                        public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-//                        }
-//                    };
-//
-//                    locMag.requestLocationUpdates(provider, 2000, 10, locationListener);
-//                        if(loc!=null)
-//                        {
-//                            String locStr = getCurrentLocation(loc);
-//                            //MyMessage.MSG_BEIAN =  MyMessage.MSG_BEIAN.replace("{0}",locStr);
-//                            MyMessage.MSG_ENTITYLOCXY = locStr;
-//                            currentMarkLocation(loc);
-//                            //drawOtherMarks();
-//                        }
-//                    }
-//
             }
 
         });
 
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    Thread.sleep(500);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//                GPS_btn.callOnClick();
-//            }
-//        }).start();
+
 
         //第一个点startPath,后面的点用lineTo
         polygon = new Polyline();
@@ -337,8 +314,8 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 
                 Log.d("AAA", "Lon:" + df.format(lon) + " , " + "Lat:" + df.format(lat));
                 wgspoint = new Point(lon, lat);
-                tvX.setText("经度："+ wgspoint.getX());
-                tvY.setText("纬度："+ wgspoint.getY());
+                tvX.setText("纬度："+ wgspoint.getX());
+                tvY.setText("经度："+ wgspoint.getY());
                 String locStr = getCurrentLocation(location);
                 MyMessage.MSG_ENTITYLOCXY = locStr;
 //                dataHelper.addTask(wgspoint.getX(),wgspoint.getY());
@@ -437,42 +414,16 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                   }
          }
     });
-
-//        final List<String> providers = locMag.getProviders(true);
-//        final boolean[] a = new boolean[1];
-//        for (final String provider : providers) {
-//            if (provider.equals("gps")) {
-//                loc = locMag.getLastKnownLocation(provider);
-//                locationListener = new LocationListener() {
-//                    public void onLocationChanged(Location location) {
-//                        if (a[0] ==false) {
-//                            Message message =new Message();
-//                            message.what=0x11;
-//                            handler.sendMessage(message);
-//                            a[0] =true;
-//                        }
-//                        String locStr = getCurrentLocation(location);
-//                        MyMessage.MSG_ENTITYLOCXY = locStr;
-//                        //MyMessage.MSG_BEIAN =  MyMessage.MSG_BEIAN.replace("{0}",locStr);
-//                        currentMarkLocation(location);
-//                        drawOtherMarks();
-//
-//
-//                    }
-//                    public void onProviderDisabled(String arg0) {
-//                    }
-//
-//                    public void onProviderEnabled(String arg0) {
-//                    }
-//
-//                    public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-//                    }
-//                };
-//                locMag.requestLocationUpdates(provider, 2000, 10, locationListener);
-//
-//            }
-//        }
-
+        chkbox_Corer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    markCover();
+                }else {
+                    markCover.removeAll();
+                }
+            }
+        });
         /**
          * 获取比例尺
          */
@@ -481,7 +432,6 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             public void preAction(float v, float v1, double v2) {
                 //todo
             }
-
             @Override
             public void postAction(float v, float v1, double v2) {
                 double scales=mapView.getScale()/100;//结果单位米，表示图上1厘米代表*米
@@ -510,50 +460,31 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     }
 
     @SuppressLint({"MissingPermission", "SetTextI18n"})
-    private void currentMarkLocation(Location location)
+    private void currentMarkLocation()
     {
         gCurrentLayerPos.removeAll();
-        drawTool.activate(DrawTool.POLYLINE);
-        double locx = location.getLongitude()+0.00635;//����
-        double locy = location.getLatitude()+0.00095;//γ��
-        wgspoint = new Point(locx, locy);
+//        drawTool.activate(DrawTool.POLYLINE);
+//        double locx = location.getLongitude()+0.00635;//����
+//        double locy = location.getLatitude()+0.00095;//γ��
+        wgspoint = new Point(114.441115,38.03241166666667);
 
         mapPoint = (Point) GeometryEngine.project(wgspoint,SpatialReference.create(4326),mapView.getSpatialReference());
-        tvX.setText("经度："+ wgspoint.getX());
-        tvY.setText("纬度："+ wgspoint.getY());
+//        tvX.setText("经度："+ wgspoint.getX());
+//        tvY.setText("纬度："+ wgspoint.getY());
         Graphic graphic = new Graphic(mapPoint,currentLocationSymbol);
         //this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16,
                 //SimpleMarkerSymbol.STYLE.CIRCLE);
         //Graphic graphic = new Graphic(mapPoint,markerSymbol);
         gCurrentLayerPos.addGraphic(graphic);
         //判断是否为跟随模式
-        if(chk_isfollow.isChecked()){
-            mapView.centerAt(mapPoint, true);
-        }
-        mapView.setScale(20000);
+//        if(chk_isfollow.isChecked()){
+//            mapView.centerAt(mapPoint, true);
+//        }
+//        mapView.setScale(20000);
 
-        ScaleBean.refreshScaleView(MainActivity.this,tvScale,mapView);
+//        ScaleBean.refreshScaleView(MainActivity.this,tvScale,mapView);
 //        mapView.setMaxResolution(300);
     }
-    /*//定位当前位置
-    private void currentlocation(Location location)
-    {
-        gLayerPos.removeAll();
-        double locx = location.getLongitude()+0.00639;//����
-        double locy = location.getLatitude()+0.00095;//γ��
-        wgspoint = new Point(locx, locy);
-        //��λ������λ��
-        mapPoint = (Point) GeometryEngine.project(wgspoint,SpatialReference.create(4326),mapView.getSpatialReference());
-        //Graphic graphic = new Graphic(mapPoint,currentLocationSymbol);
-        this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16,
-                SimpleMarkerSymbol.STYLE.CIRCLE);
-        Graphic graphic = new Graphic(mapPoint,markerSymbol);
-        gLayerPos.addGraphic(graphic);
-        //mapView.setScale(100);
-        mapView.centerAt(mapPoint, true);
-        mapView.setMaxResolution(300);
-    }*/
-
     //红圈位置
     private void markRedCircleLocation(Point point)
     {
@@ -562,6 +493,45 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 SimpleMarkerSymbol.STYLE.CIRCLE);
         Graphic graphic = new Graphic(mapPoint,markerSymbol);
         gLayerPos.addGraphic(graphic);
+    }
+
+    //添加覆盖物
+    private void markCover()
+    {
+        markCorerBeanList =databaseOperation.queryMarkCorer("1");
+        Drawable drawable = null;
+        for (int i = 0; i <markCorerBeanList.size() ; i++) {
+            String type=markCorerBeanList.get(i).type;
+            Point point =new Point(markCorerBeanList.get(i).getPoistion_x(),markCorerBeanList.get(i).getPoistion_y());
+            mapPoint = (Point) GeometryEngine.project(point,SpatialReference.create(4326),mapView.getSpatialReference());
+            if (type.equals(util.CORER_ZHUANGZHAI)) {
+                 drawable = getResources().getDrawable(R.mipmap.zhuangzhai);
+            }else if (type.equals(util.CORER_TANKEHAO)){
+                drawable = getResources().getDrawable(R.mipmap.fangtankehao);
+            }else if (type.equals(util.CORER_ZUJUETIAN)){
+                drawable = getResources().getDrawable(R.mipmap.zujueqiang);
+            }else if (type.equals(util.CORER_LANZHANG)){
+                drawable = getResources().getDrawable(R.mipmap.lanzhang);
+            }else if (type.equals(util.CORER_TIESIWANG)){
+                drawable = getResources().getDrawable(R.mipmap.tiesiwang);
+            }else if (type.equals(util.CORER_QIANHAO)){
+                drawable = getResources().getDrawable(R.mipmap.qianhao);
+            }else if (type.equals(util.CORER_ZHEZHANG)){
+                drawable = getResources().getDrawable(R.mipmap.chuizhizhezhang);
+            }else if (type.equals(util.CORER_JUMA)){
+                drawable = getResources().getDrawable(R.mipmap.juma);
+            }else if (type.equals(util.CORER_SANJIAOZHUANG)){
+                drawable = getResources().getDrawable(R.mipmap.sanjiaozhuang);
+            }else if (type.equals(util.CORER_YEZHANGONGSHI)){
+                drawable = getResources().getDrawable(R.mipmap.yezhangongshi);
+            }else if (type.equals(util.CORER_DIBAO)){
+                drawable = getResources().getDrawable(R.mipmap.dibao);
+            }
+            pictureMarkerSymbol = new PictureMarkerSymbol(MainActivity.this, drawable);
+            Graphic graphic = new Graphic(mapPoint, pictureMarkerSymbol);
+            markCover.addGraphic(graphic);
+        }
+
     }
 
     //蓝圈位置
@@ -742,10 +712,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                showToast("权限已申请");
                 //离线地图
-                String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
-                ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
-                this.mapView.addLayer(tLayer);
-                this.mapView.addLayer(new GraphicsLayer());
+//                String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
+//                ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
+//                this.mapView.addLayer(tLayer);
+//                this.mapView.addLayer(new GraphicsLayer());
                 locationDisplayManager =  mapView.getLocationDisplayManager();//获取定位类
                 locationDisplayManager.setShowLocation(true);
                 locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈
