@@ -6,10 +6,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.renshaole.testarcgis.bean.MarkCorerBean;
+import com.example.renshaole.testarcgis.bean.PictureBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
 import com.example.renshaole.testarcgis.bean.RouteNewsBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -55,13 +57,28 @@ public class DatabaseOperation {
     public void addmarkCorer(MarkCorerBean markCorerBean) {
         //获取操作数据库的工具类
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        db.beginTransaction();
         ContentValues valuse = new ContentValues();
-        valuse.put(DateSheet.markCorer.START, markCorerBean.getStart());
+        valuse.put(DateSheet.markCorer.STATE, markCorerBean.getState());
         valuse.put(DateSheet.markCorer.TYPE, markCorerBean.getType());
         valuse.put(DateSheet.markCorer.POISTION_X, markCorerBean.getPoistion_x());
         valuse.put(DateSheet.markCorer.POISTION_Y, markCorerBean.getPoistion_y());
         //参数(表名,可以为空了列名，ContentValues)
         db.insert(DateSheet.markCorer.TABLE_NAME, DateSheet.markCorer.POISTION_X, valuse);
+        db.setTransactionSuccessful();
+        db.endTransaction();
+        db.close();
+    }
+    // 添加Picture表的记录
+    public void addPicture(PictureBean pictureBean) {
+        //获取操作数据库的工具类
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues valuse = new ContentValues();
+        valuse.put(DateSheet.picture.TYPE, pictureBean.getTypes());
+        valuse.put(DateSheet.picture.IMGNAME, pictureBean.getImg_name());
+        valuse.put(DateSheet.picture.IMGPATH, pictureBean.getImg_path());
+        //参数(表名,可以为空了列名，ContentValues)
+        db.insert(DateSheet.picture.TABLE_NAME, DateSheet.picture.IMGPATH, valuse);
         db.close();
     }
 
@@ -80,6 +97,14 @@ public class DatabaseOperation {
         String[] whereArgs = {String.valueOf(id)};
         //表名，条件，条件的值
         db.delete(DateSheet.routeNews.TABLE_NAME, whereClause, whereArgs);
+        db.close();
+    }
+
+    //删除MarkCorer表的记录
+    public void deleteMarkCorer() {
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        //表名，条件，条件的值
+        db.delete(DateSheet.markCorer.TABLE_NAME, null, null);
         db.close();
     }
 
@@ -128,7 +153,7 @@ public class DatabaseOperation {
         MarkCorerBean markCorerBean = null;
         while (c.moveToNext()) {
             markCorerBean = new MarkCorerBean();
-            markCorerBean.setStart(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.START)));
+            markCorerBean.setState(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.STATE)));
             markCorerBean.setType(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.TYPE)));
             markCorerBean.setPoistion_x(Double.parseDouble(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.POISTION_X))));
             markCorerBean.setPoistion_y(Double.parseDouble(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.POISTION_Y))));
@@ -137,5 +162,23 @@ public class DatabaseOperation {
         c.close();
         db.close();
         return markCorerBeanArrayList;
+    }
+
+    //多表联合查询
+    public List<PictureBean> query() {
+        List<PictureBean> pictureBeanList =new ArrayList<>();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        Cursor c = db.rawQuery(" SELECT picture.img_path, markCorer.poistion_x,markCorer.poistion_y FROM  picture,markCorer "+ "WHERE picture.type= markCorer.type",null);
+        PictureBean pictureBean = null;
+        while (c.moveToNext()) {
+            pictureBean = new PictureBean();
+            pictureBean.setImg_path(c.getString(c.getColumnIndexOrThrow(DateSheet.picture.IMGPATH)));
+            pictureBean.setPoistion_x(Double.parseDouble(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.POISTION_X))));
+            pictureBean.setPoistion_y(Double.parseDouble(c.getString(c.getColumnIndexOrThrow(DateSheet.markCorer.POISTION_Y))));
+            pictureBeanList.add(pictureBean);
+        }
+        c.close();
+        db.close();
+        return pictureBeanList;
     }
 }

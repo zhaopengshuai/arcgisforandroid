@@ -21,7 +21,7 @@ import com.example.renshaole.testarcgis.utils.BeanUtil;
 import java.util.List;
 
 /**
- *
+ *机动路线
  */
 public class RouteNewsAdapter extends BaseAdapter {
     private Context context;

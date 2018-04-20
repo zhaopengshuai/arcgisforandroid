@@ -28,10 +28,17 @@ public  final  class DateSheet {
     //障碍物坐标
     public static abstract class markCorer implements BaseColumns {
         public static  final String TABLE_NAME="markCorer";
-        public static  final String START="start";
+        public static  final String STATE="state";
         public static  final String TYPE="type";
         public static  final String POISTION_X="poistion_x";
         public static  final String POISTION_Y="poistion_y";
+    }
+    //障碍物坐标
+    public static abstract class picture implements BaseColumns {
+        public static  final String TABLE_NAME="picture";
+        public static  final String TYPE="type";
+        public static  final String IMGPATH="img_path";
+        public static  final String IMGNAME="img_name";
     }
 
 }

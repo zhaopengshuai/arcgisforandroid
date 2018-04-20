@@ -5,12 +5,19 @@ package com.example.renshaole.testarcgis.bean;
  */
 
 public class MarkCorerBean {
-    public String start;
+    public String state;
     public String type;
     public double poistion_x;
     public  double poistion_y;
 
     public MarkCorerBean() {
+    }
+
+    public MarkCorerBean(String state, String type, double poistion_x, double poistion_y) {
+        this.state = state;
+        this.type = type;
+        this.poistion_x = poistion_x;
+        this.poistion_y = poistion_y;
     }
 
     public String getType() {
@@ -21,13 +28,14 @@ public class MarkCorerBean {
         this.type = type;
     }
 
-    public String getStart() {
-        return start;
+    public String getState() {
+        return state;
     }
 
-    public void setStart(String start) {
-        this.start = start;
+    public void setState(String state) {
+        this.state = state;
     }
+
 
     public double getPoistion_x() {
         return poistion_x;
@@ -44,4 +52,7 @@ public class MarkCorerBean {
     public void setPoistion_y(double poistion_y) {
         this.poistion_y = poistion_y;
     }
+
+
+
 }

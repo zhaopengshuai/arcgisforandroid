@@ -79,7 +79,9 @@
 
         <service android:name="cn.jucheng.jclibs.socket.WorkService" />
 
-        <activity android:name=".RouteNewsActivity"></activity>
+        <activity android:name=".RouteNewsActivity" />
+        <activity android:name=".ObstacleActivity" />
+        <activity android:name=".AddPbstacleActivity"></activity>
     </application>
 
 </manifest>

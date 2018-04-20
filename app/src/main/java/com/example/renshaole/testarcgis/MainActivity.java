@@ -6,7 +6,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -53,13 +57,18 @@ import com.esri.core.symbol.SimpleFillSymbol;
 import com.esri.core.symbol.SimpleLineSymbol;
 import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.example.renshaole.testarcgis.bean.MarkCorerBean;
+import com.example.renshaole.testarcgis.bean.PictureBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
 import com.example.renshaole.testarcgis.bean.ScaleBean;
 import com.example.renshaole.testarcgis.decoding.DecodingLibrary;
 import com.example.renshaole.testarcgis.helper.DatabaseHelper;
 import com.example.renshaole.testarcgis.helper.DatabaseOperation;
+import com.example.renshaole.testarcgis.location.GPSLocationListener;
+import com.example.renshaole.testarcgis.location.GPSLocationManager;
+import com.example.renshaole.testarcgis.location.GPSProviderStatus;
 import com.example.renshaole.testarcgis.pop.ConfirmDialogPopWindow;
 import com.example.renshaole.testarcgis.utils.BeanUtil;
+import com.example.renshaole.testarcgis.utils.FileUtil;
 import com.example.renshaole.testarcgis.utils.SPUtils;
 import com.example.renshaole.testarcgis.utils.util;
 import com.example.renshaole.testarcgis.widget.Entity;
@@ -90,14 +99,14 @@ import static com.example.renshaole.testarcgis.utils.util.CORER_ZHUANGZHAI;
 
 
 public class MainActivity extends AdaptationActivity implements DrawEventListener {
-    Polyline polygon ;
+    Polyline polygon;
     Graphic graphics;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
     private static final int MY_PERMISSIONS_REQUEST_CALL_CAMERA = 2;
-    String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    String[] permissions = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     // 声明一个集合，在后面的代码中用来存储用户拒绝授权的权
     List<String> mPermissionList = new ArrayList<>();
-    private   String network="gps";
+    private String network = "gps";
     private MapView mapView = null;
     private GraphicsLayer drawLayer;
     private DrawTool drawTool;
@@ -131,17 +140,20 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     private Timer timer = new Timer();
     private LocationListener locationListener;
     private Handler handler;
-    private int pointCount=0;
+    private int pointCount = 0;
     LocationDisplayManager locationDisplayManager;
     DatabaseOperation databaseOperation;
     double x = 0;
-    double y=0;
-    boolean isSelected=true;
-    private  App app;
-   private ConfirmDialogPopWindow confirmDialogPopWindow;
+    double y = 0;
+    boolean isSelected = true;
+    private App app;
+    private ConfirmDialogPopWindow confirmDialogPopWindow;
     private PictureMarkerSymbol pictureMarkerSymbol;
-    private  List<MarkCorerBean> markCorerBeanList;
+    private List<MarkCorerBean> markCorerBeanList;
     private CheckBox chkbox_Corer;
+    private GPSLocationManager gpsLocationManager;
+    private List<PictureBean>  list;
+    private List<MarkCorerBean>  listMarkCorerBean;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint({"MissingPermission", "HandlerLeak"})
@@ -149,31 +161,31 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        app= (App) getApplication();
+        app = (App) getApplication();
         mPermissionList.clear();
-        handler =new Handler(){
+        handler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 0x11) {
 //                    locMag.requestLocationUpdates(network, 2000, 10, locationListener);
-                    Bundle bundle=msg.getData();
-                    String position=bundle.getString("position");
-                    String time=bundle.getString("time");
+                    Bundle bundle = msg.getData();
+                    String position = bundle.getString("position");
+                    String time = bundle.getString("time");
                     if (BeanUtil.isEmpty(confirmDialogPopWindow)) {
-                        confirmDialogPopWindow =new ConfirmDialogPopWindow(MainActivity.this,position);
-                        databaseOperation.addRouteNews(position,time);
-                    }else {
+                        confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, position);
+                        databaseOperation.addRouteNews(position, time);
+                    } else {
                         confirmDialogPopWindow.dismiss();
-                        confirmDialogPopWindow =new ConfirmDialogPopWindow(MainActivity.this,position);
-                        databaseOperation.addRouteNews(position,time);
+                        confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, position);
+                        databaseOperation.addRouteNews(position, time);
                     }
-                     confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
-                         @Override
-                         public void onClick(View v) {
-                             confirmDialogPopWindow.dismiss();
-                         }
-                     });
+                    confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            confirmDialogPopWindow.dismiss();
+                        }
+                    });
                     confirmDialogPopWindow.setBtnQueDingOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -191,13 +203,13 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             }
         }
 
-        databaseOperation=new DatabaseOperation(this);
-
+        databaseOperation = new DatabaseOperation(this);
+        gpsLocationManager = GPSLocationManager.getInstances(MainActivity.this);
         iv_connect = this.findViewById(R.id.iv_connnect);
-        tvScale=findViewById(R.id.tvScale);
-        tvX=findViewById(R.id.tvX);
-        tvY=findViewById(R.id.tvY);
-        tvRouteNews=findViewById(R.id.tvRouteNews);
+        tvScale = findViewById(R.id.tvScale);
+        tvX = findViewById(R.id.tvX);
+        tvY = findViewById(R.id.tvY);
+        tvRouteNews = findViewById(R.id.tvRouteNews);
         chk_isfollow = this.findViewById(R.id.chkbox_isFollow);
         chkbox_Corer = this.findViewById(R.id.chkbox_Corer);
         chkbox_isGuiJi = this.findViewById(R.id.chkbox_isGuiJi);
@@ -214,7 +226,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         tvRouteNews.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(MainActivity.this,RouteNewsActivity.class);
+                Intent intent = new Intent(MainActivity.this, RouteNewsActivity.class);
                 startActivity(intent);
             }
         });
@@ -232,21 +244,22 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         ArcGISTiledMapServiceLayer arcGISTiledMapServiceLayer = new ArcGISTiledMapServiceLayer(strMapUrl);
         this.mapView.addLayer(arcGISTiledMapServiceLayer);
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
-        if (mPermissionList.isEmpty()) {//未授予的权限为空，表示都授予了
+        //未授予的权限为空，表示都授予了
+        if (mPermissionList.isEmpty()) {
             //离线地图
-//            String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
+//            String theOfflineTiledLayers = getSDPath() + "/DCIM/test.tpk";
 //            ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
 //            this.mapView.addLayer(tLayer);
 //            this.mapView.addLayer(new GraphicsLayer());
-            locationDisplayManager =  mapView.getLocationDisplayManager();//获取定位类
+            locationDisplayManager = mapView.getLocationDisplayManager();//获取定位类
             locationDisplayManager.setShowLocation(true);
             locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈
             locationDisplayManager.setAutoPanMode(LocationDisplayManager.AutoPanMode.LOCATION);//设置模式
             locationDisplayManager.setShowPings(true);
             try {
                 locationDisplayManager.setAccuracySymbol(new SimpleFillSymbol(Color.GREEN).setAlpha(20));
-                locationDisplayManager.setDefaultSymbol  (new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
-                locationDisplayManager.setLocationAcquiringSymbol (new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
+                locationDisplayManager.setDefaultSymbol(new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
+                locationDisplayManager.setLocationAcquiringSymbol(new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -289,7 +302,6 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         locationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.location));
         currentLocationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.mipmap.ic_launcher));
         locMag = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         GPS_btn.setOnClickListener(new OnClickListener() {
             @SuppressLint("MissingPermission")
             public void onClick(View v) {
@@ -301,86 +313,89 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         });
 
 
-
         //第一个点startPath,后面的点用lineTo
         polygon = new Polyline();
+        //定位回调监听
         locationDisplayManager.setLocationListener(new LocationListener() {
             DecimalFormat df = new DecimalFormat("###.000000");
+
             @SuppressLint("SetTextI18n")
             @Override
             public void onLocationChanged(Location location) {
                 double lon = location.getLongitude();
                 double lat = location.getLatitude();
-                
+
                 Log.d("AAA", "Lon:" + df.format(lon) + " , " + "Lat:" + df.format(lat));
                 wgspoint = new Point(lon, lat);
-                tvX.setText("纬度："+ wgspoint.getX());
-                tvY.setText("经度："+ wgspoint.getY());
+                tvX.setText("纬度：" + wgspoint.getX());
+                tvY.setText("经度：" + wgspoint.getY());
                 String locStr = getCurrentLocation(location);
                 MyMessage.MSG_ENTITYLOCXY = locStr;
 //                dataHelper.addTask(wgspoint.getX(),wgspoint.getY());
 //                dataHelper.GetUserList();
-                mapPoint = (Point) GeometryEngine.project(wgspoint,SpatialReference.create(4326),mapView.getSpatialReference());
+                mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
 
                 //判断是否开启轨迹
                 if (chkbox_isGuiJi.isChecked()) {
-                        if (pointCount == 0) {
-                                polygon.startPath(new Point(mapPoint.getX(),mapPoint.getY()));
-                            databaseOperation.addPoistion(wgspoint.getX(),wgspoint.getY());    //保存经纬度
-                                x=wgspoint.getX();
-                                y=wgspoint.getY();
-                        } else {
-                            if (chkbox_isLookGuiJi.isChecked()) {
-                                if (isSelected ) {
-                                    polygon.lineTo(new Point(mapPoint.getX(),mapPoint.getY()));
-                                }
-                                if (x==wgspoint.getX()||y==wgspoint.getY()) {
-                                }else {
-                                    databaseOperation.addPoistion(wgspoint.getX(),wgspoint.getY());    //保存经纬度
-                                }
-                                x=wgspoint.getX();
-                                y=wgspoint.getY();
-                            }else {
-                                if (x==wgspoint.getX()||y==wgspoint.getY()) {
-                                }else {
-                                    databaseOperation.addPoistion(wgspoint.getX(),wgspoint.getY());    //保存经纬度
-                                }
-                                x=wgspoint.getX();
-                                y=wgspoint.getY();
+                    if (pointCount == 0) {
+                        polygon.startPath(new Point(mapPoint.getX(), mapPoint.getY()));
+                        databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                        x = wgspoint.getX();
+                        y = wgspoint.getY();
+                    } else {
+                        if (chkbox_isLookGuiJi.isChecked()) {
+                            if (isSelected) {
+                                polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
                             }
+                            if (x == wgspoint.getX() || y == wgspoint.getY()) {
+                            } else {
+                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                            }
+                            x = wgspoint.getX();
+                            y = wgspoint.getY();
+                        } else {
+                            if (x == wgspoint.getX() || y == wgspoint.getY()) {
+                            } else {
+                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                            }
+                            x = wgspoint.getX();
+                            y = wgspoint.getY();
+                        }
 
                     }
                     if (pointCount == 0) {
-                        long  scale= (long) SPUtils.get(MainActivity.this,"scale",(long)-1);
+                        long scale = (long) SPUtils.get(MainActivity.this, "scale", (long) -1);
                         if (scale == -1) {
                             mapView.setScale(500000);   //设置初始比例为5公里
-                        }else {
-                            mapView.setScale(scale*100);
+                        } else {
+                            mapView.setScale(scale * 100);
                         }
-                        ScaleBean.refreshScaleView(MainActivity.this,tvScale,mapView);
+                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
                     }
 
-                    if ( !chkbox_isLookGuiJi.isChecked()) {
+                    if (!chkbox_isLookGuiJi.isChecked()) {
 
-                    }else {
-                        graphics = new Graphic(polygon,new SimpleLineSymbol(Color.RED, 2));
+                    } else {
+                        graphics = new Graphic(polygon, new SimpleLineSymbol(Color.RED, 2));
                         line.addGraphic(graphics);
                     }
                 }
                 //判断是否为跟随模式
-                if(chk_isfollow.isChecked()){
+                if (chk_isfollow.isChecked()) {
                     mapView.centerAt(mapPoint, true);
                 }
                 pointCount++;
 
             }
+
             @Override
             public void onStatusChanged(String provider, int status, Bundle extras) {
             }
-            @Override
 
+            @Override
             public void onProviderEnabled(String provider) {
             }
+
             @Override
 
             public void onProviderDisabled(String provider) {
@@ -388,38 +403,38 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         });
         //通过设置checkbox的监听事件，判断checkbox是否被选中
         chkbox_isLookGuiJi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-             @Override
-             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                  if (isChecked) {
-                      isSelected=false;
-                      polygon = new Polyline();
-                      line.removeAll();
-                     int a=0;
-                      List<QoistionBean> list= databaseOperation.queryPoistion();
-                      for (int i = 0; i <list.size() ; i++) {
-                          wgspoint = new Point(Double.parseDouble(list.get(i).getPoistion_x()),Double.parseDouble(list.get(i).getPoistion_y()));
-                          mapPoint = (Point) GeometryEngine.project(wgspoint,SpatialReference.create(4326),mapView.getSpatialReference());
-                          if (a == 0) {
-                              polygon.startPath(new Point(mapPoint.getX(),mapPoint.getY()));
-                          }else {
-                              polygon.lineTo(new Point(mapPoint.getX(),mapPoint.getY()));
-                          }
-                          a++;
-                          graphics = new Graphic(polygon,new SimpleLineSymbol(Color.RED, 2));
-                          line.addGraphic(graphics);
-                      }
-                       }else {
-                      isSelected=true;
-                      line.removeAll();
-                  }
-         }
-    });
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    isSelected = false;
+                    polygon = new Polyline();
+                    line.removeAll();
+                    int a = 0;
+                    List<QoistionBean> list = databaseOperation.queryPoistion();
+                    for (int i = 0; i < list.size(); i++) {
+                        wgspoint = new Point(Double.parseDouble(list.get(i).getPoistion_x()), Double.parseDouble(list.get(i).getPoistion_y()));
+                        mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
+                        if (a == 0) {
+                            polygon.startPath(new Point(mapPoint.getX(), mapPoint.getY()));
+                        } else {
+                            polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
+                        }
+                        a++;
+                        graphics = new Graphic(polygon, new SimpleLineSymbol(Color.RED, 2));
+                        line.addGraphic(graphics);
+                    }
+                } else {
+                    isSelected = true;
+                    line.removeAll();
+                }
+            }
+        });
         chkbox_Corer.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     markCover();
-                }else {
+                } else {
                     markCover.removeAll();
                 }
             }
@@ -432,48 +447,50 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             public void preAction(float v, float v1, double v2) {
                 //todo
             }
+
             @Override
             public void postAction(float v, float v1, double v2) {
-                double scales=mapView.getScale()/100;//结果单位米，表示图上1厘米代表*米
-                SPUtils.put(MainActivity.this,"scale",(long)scales);
-                ScaleBean.refreshScaleView(MainActivity.this,tvScale,mapView);
+                double scales = mapView.getScale() / 100;//结果单位米，表示图上1厘米代表*米
+                SPUtils.put(MainActivity.this, "scale", (long) scales);
+                ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
             }
         });
 
 //        getCurrentEntityInfo();
+//        gpsLocationManager.start(new MyListener());
+
+        //添加测试数据
+//        addPicture();
+//        addlistMarkCorerBean();
     }
 
 
-
-    private void drawOtherMarks()
-    {
+    private void drawOtherMarks() {
         gLayerPos.removeAll();
         Map<String, Entity> locationMap = DecodingLibrary.getEntityLocationMap();
         for (Map.Entry<String, Entity> entry : locationMap.entrySet()) {
-            if(entry.getValue().sideCode.equals(Entity.SIDE_RED) ) {
+            if (entry.getValue().sideCode.equals(Entity.SIDE_RED)) {
                 markRedCircleLocation(entry.getValue().locationPoint);
-            }
-            else if (entry.getValue().sideCode.equals(Entity.SIDE_BLUE)){
+            } else if (entry.getValue().sideCode.equals(Entity.SIDE_BLUE)) {
                 markBlueCircleLocation(entry.getValue().locationPoint);
             }
         }
     }
 
     @SuppressLint({"MissingPermission", "SetTextI18n"})
-    private void currentMarkLocation()
-    {
+    private void currentMarkLocation() {
         gCurrentLayerPos.removeAll();
 //        drawTool.activate(DrawTool.POLYLINE);
 //        double locx = location.getLongitude()+0.00635;//����
 //        double locy = location.getLatitude()+0.00095;//γ��
-        wgspoint = new Point(114.441115,38.03241166666667);
+        wgspoint = new Point(114.441115, 38.03241166666667);
 
-        mapPoint = (Point) GeometryEngine.project(wgspoint,SpatialReference.create(4326),mapView.getSpatialReference());
+        mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
 //        tvX.setText("经度："+ wgspoint.getX());
 //        tvY.setText("纬度："+ wgspoint.getY());
-        Graphic graphic = new Graphic(mapPoint,currentLocationSymbol);
+        Graphic graphic = new Graphic(mapPoint, currentLocationSymbol);
         //this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16,
-                //SimpleMarkerSymbol.STYLE.CIRCLE);
+        //SimpleMarkerSymbol.STYLE.CIRCLE);
         //Graphic graphic = new Graphic(mapPoint,markerSymbol);
         gCurrentLayerPos.addGraphic(graphic);
         //判断是否为跟随模式
@@ -485,49 +502,34 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 //        ScaleBean.refreshScaleView(MainActivity.this,tvScale,mapView);
 //        mapView.setMaxResolution(300);
     }
+
+
     //红圈位置
-    private void markRedCircleLocation(Point point)
-    {
-        mapPoint = (Point) GeometryEngine.project(point,SpatialReference.create(4326),mapView.getSpatialReference());
+    private void markRedCircleLocation(Point point) {
+        mapPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326), mapView.getSpatialReference());
         this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16,
                 SimpleMarkerSymbol.STYLE.CIRCLE);
-        Graphic graphic = new Graphic(mapPoint,markerSymbol);
+        Graphic graphic = new Graphic(mapPoint, markerSymbol);
         gLayerPos.addGraphic(graphic);
     }
 
     //添加覆盖物
-    private void markCover()
-    {
-        markCorerBeanList =databaseOperation.queryMarkCorer("1");
-        Drawable drawable = null;
-        for (int i = 0; i <markCorerBeanList.size() ; i++) {
-            String type=markCorerBeanList.get(i).type;
-            Point point =new Point(markCorerBeanList.get(i).getPoistion_x(),markCorerBeanList.get(i).getPoistion_y());
-            mapPoint = (Point) GeometryEngine.project(point,SpatialReference.create(4326),mapView.getSpatialReference());
-            if (type.equals(util.CORER_ZHUANGZHAI)) {
-                 drawable = getResources().getDrawable(R.mipmap.zhuangzhai);
-            }else if (type.equals(util.CORER_TANKEHAO)){
-                drawable = getResources().getDrawable(R.mipmap.fangtankehao);
-            }else if (type.equals(util.CORER_ZUJUETIAN)){
-                drawable = getResources().getDrawable(R.mipmap.zujueqiang);
-            }else if (type.equals(util.CORER_LANZHANG)){
-                drawable = getResources().getDrawable(R.mipmap.lanzhang);
-            }else if (type.equals(util.CORER_TIESIWANG)){
-                drawable = getResources().getDrawable(R.mipmap.tiesiwang);
-            }else if (type.equals(util.CORER_QIANHAO)){
-                drawable = getResources().getDrawable(R.mipmap.qianhao);
-            }else if (type.equals(util.CORER_ZHEZHANG)){
-                drawable = getResources().getDrawable(R.mipmap.chuizhizhezhang);
-            }else if (type.equals(util.CORER_JUMA)){
-                drawable = getResources().getDrawable(R.mipmap.juma);
-            }else if (type.equals(util.CORER_SANJIAOZHUANG)){
-                drawable = getResources().getDrawable(R.mipmap.sanjiaozhuang);
-            }else if (type.equals(util.CORER_YEZHANGONGSHI)){
-                drawable = getResources().getDrawable(R.mipmap.yezhangongshi);
-            }else if (type.equals(util.CORER_DIBAO)){
-                drawable = getResources().getDrawable(R.mipmap.dibao);
-            }
+    private void markCover() {
+//        databaseOperation.deleteMarkCorer();
+
+       List<PictureBean> list= databaseOperation.query();
+        Drawable drawable;
+        Resources res = getResources();
+        for (int i = 0; i < list.size(); i++) {
+            Point point = new Point(list.get(i).getPoistion_x(), list.get(i).getPoistion_y());
+            mapPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326), mapView.getSpatialReference());
+            Bitmap bmp= BitmapFactory.decodeFile(list.get(i).getImg_path());
+            //自定义图片大小
+//            Bitmap newBmp = Bitmap.createScaledBitmap(bmp, 160, 160, true);
+            //将bitmap转化为Drawable,这是新的方法,如果用过时的方法Drawable drawable  = new BitmapDrawable(newBmp),则会造成图片大小和原来图片大小不符的情况,当然这种情况发生在没有自定义大小的情况下
+             drawable  = new BitmapDrawable(res,bmp);
             pictureMarkerSymbol = new PictureMarkerSymbol(MainActivity.this, drawable);
+//            pictureMarkerSymbol.setUrl();
             Graphic graphic = new Graphic(mapPoint, pictureMarkerSymbol);
             markCover.addGraphic(graphic);
         }
@@ -535,21 +537,18 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     }
 
     //蓝圈位置
-    private void markBlueCircleLocation(Point point)
-    {
-        mapPoint = (Point) GeometryEngine.project(point,SpatialReference.create(4326),mapView.getSpatialReference());
+    private void markBlueCircleLocation(Point point) {
+        mapPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326), mapView.getSpatialReference());
         this.markerSymbol = new SimpleMarkerSymbol(Color.BLUE, 16,
                 SimpleMarkerSymbol.STYLE.CIRCLE);
-        Graphic graphic = new Graphic(mapPoint,markerSymbol);
+        Graphic graphic = new Graphic(mapPoint, markerSymbol);
         gLayerPos.addGraphic(graphic);
     }
 
 
-
-    private void markenvelopeLocation(Point point1)
-    {
-        mapPoint = (Point) GeometryEngine.project(point1,SpatialReference.create(4326),mapView.getSpatialReference());
-        Graphic graphic = new Graphic(mapPoint,locationSymbol);
+    private void markenvelopeLocation(Point point1) {
+        mapPoint = (Point) GeometryEngine.project(point1, SpatialReference.create(4326), mapView.getSpatialReference());
+        Graphic graphic = new Graphic(mapPoint, locationSymbol);
         gLayerPos.addGraphic(graphic);
         /*this.fillSymbol = new SimpleFillSymbol(Color.GREEN);
         this.fillSymbol.setAlpha(90);
@@ -568,7 +567,8 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
 
     /**
-     *下拉弹框
+     * 下拉弹框
+     *
      * @param item
      * @return
      */
@@ -593,6 +593,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             case R.id.freehandpolyline:
                 drawTool.activate(DrawTool.FREEHAND_POLYLINE);
                 break;
+            case R.id.obstacle:
+                Intent intent=new Intent(MainActivity.this,ObstacleActivity.class);
+                startActivity(intent);
+                break;
             case R.id.circle:
                 drawTool.activate(DrawTool.CIRCLE);
                 break;
@@ -611,23 +615,23 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
     /**
      * 判断SD卡
+     *
      * @return
      */
-    public String getSDPath(){
+    public String getSDPath() {
         File sdDir = null;
         boolean sdCardExist = Environment.getExternalStorageState()
                 .equals(android.os.Environment.MEDIA_MOUNTED);//判断sd卡是否存在
-        if(sdCardExist)
-        {
+        if (sdCardExist) {
             sdDir = Environment.getExternalStorageDirectory();//获取跟目录
         }
         return sdDir.toString();
     }
 
 
-    public  String getCurrentLocation(Location location) {
+    public String getCurrentLocation(Location location) {
         String locStr = Double.toString(location.getLongitude()) + "+" + Double.toString(location.getLatitude());
-        return  locStr;
+        return locStr;
     }
 
     private TimerTask timerTask = new TimerTask() {
@@ -637,14 +641,14 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         }
     };
 
-    public  void getCurrentEntityInfo() {
+    public void getCurrentEntityInfo() {
         String entiyAddrCode = "";
         try {
             String path = Environment.getExternalStorageDirectory().toString();
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder;
             builder = builderFactory.newDocumentBuilder();
-            InputStream is= new FileInputStream(path + "/ClientConfig.xml");
+            InputStream is = new FileInputStream(path + "/ClientConfig.xml");
             Document document = builder.parse(is);
             Element element = document.getDocumentElement();
             entiyAddrCode = element.getElementsByTagName("EntityAddrCode").item(0).getTextContent();
@@ -662,11 +666,9 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     }
 
 
-
-
-
     /**
      * 获取屏幕PPI
+     *
      * @return
      */
     @SuppressLint("NewApi")
@@ -674,10 +676,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         android.graphics.Point point = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getRealSize(point);//获取屏幕的真实分辨率
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        double x = Math.pow(point.x/ dm.xdpi, 2);//
+        double x = Math.pow(point.x / dm.xdpi, 2);//
         double y = Math.pow(point.y / dm.ydpi, 2);
         double screenInches = Math.sqrt(x + y);
-        Double ppi=Math.sqrt(Math.pow(point.x, 2)+Math.pow(point.y, 2))/screenInches;
+        Double ppi = Math.sqrt(Math.pow(point.x, 2) + Math.pow(point.y, 2)) / screenInches;
         return ppi;
     }
 
@@ -685,7 +687,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        locationDisplayManager.stop();
+//        locationDisplayManager.stop();
         databaseOperation.deletePoistion();
     }
 
@@ -699,12 +701,15 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         super.onPause();
         mapView.pause();
     }
-    @Override 	protected void onResume() {
+
+    @Override
+    protected void onResume() {
         super.onResume();
         mapView.unpause();
         mapView.setScale(1000);
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
@@ -712,21 +717,21 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 //                showToast("权限已申请");
                 //离线地图
-//                String theOfflineTiledLayers = getSDPath() +  "/DCIM/test.tpk";
+//                String theOfflineTiledLayers = getSDPath() + "/DCIM/test.tpk";
 //                ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
 //                this.mapView.addLayer(tLayer);
 //                this.mapView.addLayer(new GraphicsLayer());
-                locationDisplayManager =  mapView.getLocationDisplayManager();//获取定位类
+                locationDisplayManager = mapView.getLocationDisplayManager();//获取定位类
                 locationDisplayManager.setShowLocation(true);
-                locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈
+                locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈getLocationListener
                 locationDisplayManager.setAutoPanMode(LocationDisplayManager.AutoPanMode.LOCATION);//设置模式
                 locationDisplayManager.setShowPings(true);
 
 
                 try {
                     locationDisplayManager.setAccuracySymbol(new SimpleFillSymbol(Color.GREEN).setAlpha(20));
-                    locationDisplayManager.setDefaultSymbol  (new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
-                    locationDisplayManager.setLocationAcquiringSymbol (new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
+                    locationDisplayManager.setDefaultSymbol(new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
+                    locationDisplayManager.setLocationAcquiringSymbol(new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -735,7 +740,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             } else {
                 showToast("权限已拒绝");
             }
-        }else if (requestCode == MY_PERMISSIONS_REQUEST_CALL_CAMERA){
+        } else if (requestCode == MY_PERMISSIONS_REQUEST_CALL_CAMERA) {
             for (int i = 0; i < grantResults.length; i++) {
                 if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                     //判断是否勾选禁止后不再询问
@@ -748,9 +753,101 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+    class MyListener implements GPSLocationListener {
 
-    private void showToast(String string){
-        Toast.makeText(MainActivity.this,string,Toast.LENGTH_LONG).show();
+        @Override
+        public void UpdateLocation(Location location) {
+            if (location != null) {
+//                text_gps.setText("经度：" + location.getLongitude() + "\n纬度：" + location.getLatitude());
+            }
+        }
+
+        @Override
+        public void UpdateStatus(String provider, int status, Bundle extras) {
+            if ("gps" == provider) {
+//                Toast.makeText(MainActivity.this, "定位类型：" + provider, Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void UpdateGPSProviderStatus(int gpsStatus) {
+            switch (gpsStatus) {
+                case GPSProviderStatus.GPS_ENABLED:
+//                    Toast.makeText(MainActivity.this, "GPS开启", Toast.LENGTH_SHORT).show();
+                    break;
+                case GPSProviderStatus.GPS_DISABLED:
+//                    Toast.makeText(MainActivity.this, "GPS关闭", Toast.LENGTH_SHORT).show();
+                    break;
+                case GPSProviderStatus.GPS_OUT_OF_SERVICE:
+//                    Toast.makeText(MainActivity.this, "GPS不可用", Toast.LENGTH_SHORT).show();
+                    break;
+                case GPSProviderStatus.GPS_TEMPORARILY_UNAVAILABLE:
+//                    Toast.makeText(MainActivity.this, "GPS暂时不可用", Toast.LENGTH_SHORT).show();
+                    break;
+                case GPSProviderStatus.GPS_AVAILABLE:
+//                    Toast.makeText(MainActivity.this, "GPS可用啦", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+    private void showToast(String string) {
+        Toast.makeText(MainActivity.this, string, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * 添加临时数据
+     */
+    public  void addPicture(){
+        list =new ArrayList<>();
+        String sd_path = FileUtil.getSDCardPath() + "/DCIM";
+        PictureBean pictureBean1 =new PictureBean("101021508002",sd_path+"/zhuangzhai.png","zhuangzhai.png");
+        PictureBean pictureBean2 =new PictureBean("101021509002",sd_path+"/fangtankehao.png","fangtankehao.png");
+        PictureBean pictureBean3 =new PictureBean("101021509012",sd_path+"/zujueqiang.png","zujueqiang.png");
+        PictureBean pictureBean4 =new PictureBean("101021511002",sd_path+"/lanzhang.png","lanzhang.png");
+        PictureBean pictureBean5 =new PictureBean("101021507002",sd_path+"/tiesiwang.png","tiesiwang.png");
+        PictureBean pictureBean6 =new PictureBean("101021501002",sd_path+"/qianhao.png","qianhao.png");
+        PictureBean pictureBean7 =new PictureBean("101021516002",sd_path+"/chuizhizhezhang.png","chuizhizhezhang.png");
+        PictureBean pictureBean8 =new PictureBean("101021513001",sd_path+"/sanjiaozhuang.png","sanjiaozhuang.png");
+        PictureBean pictureBean9 =new PictureBean("101021504001",sd_path+"/yezhangongshi.png","yezhangongshi.png");
+        PictureBean pictureBean10 =new PictureBean("101021506001",sd_path+"/dibao.png","dibao.png");
+        list.add(pictureBean1);
+        list.add(pictureBean2);
+        list.add(pictureBean3);
+        list.add(pictureBean4);
+        list.add(pictureBean5);
+        list.add(pictureBean6);
+        list.add(pictureBean7);
+        list.add(pictureBean8);
+        list.add(pictureBean9);
+        list.add(pictureBean10);
+        for (int i = 0; i <list.size() ; i++) {
+            databaseOperation.addPicture(list.get(i));
+        }
+    }
+    public void addlistMarkCorerBean() {
+        listMarkCorerBean = new ArrayList<>();
+        MarkCorerBean markCorerBean1 =new MarkCorerBean("1","101021508002",114.43282166664521,38.01868333335248);
+        MarkCorerBean markCorerBean2 =new MarkCorerBean("1","101021509002",114.43601166666667,38.018355);
+        MarkCorerBean markCorerBean3 =new MarkCorerBean("1","101021509012",114.44776166666666,38.020338333333335);
+        MarkCorerBean markCorerBean4 =new MarkCorerBean("1","101021511002",114.44486166666665,38.025846666666666);
+        MarkCorerBean markCorerBean5 =new MarkCorerBean("1","101021507002",114.43797166666667,38.03556666666667);
+        MarkCorerBean markCorerBean6 =new MarkCorerBean("1","101021501002",114.41416166666667,38.019194999999996);
+        MarkCorerBean markCorerBean7 =new MarkCorerBean("1","101021516002",114.403815,38.02699666666667);
+        MarkCorerBean markCorerBean8 =new MarkCorerBean("1","101021513001",114.42700833333335,38.00969666666666);
+        MarkCorerBean markCorerBean9 =new MarkCorerBean("1","101021504001",114.44149666666665,38.00085);
+        MarkCorerBean markCorerBean10 =new MarkCorerBean("1","101021506001",114.46469,38.0075);
+        listMarkCorerBean.add(markCorerBean1);
+        listMarkCorerBean.add(markCorerBean2);
+        listMarkCorerBean.add(markCorerBean3);
+        listMarkCorerBean.add(markCorerBean4);
+        listMarkCorerBean.add(markCorerBean5);
+        listMarkCorerBean.add(markCorerBean6);
+        listMarkCorerBean.add(markCorerBean7);
+        listMarkCorerBean.add(markCorerBean8);
+        listMarkCorerBean.add(markCorerBean9);
+        listMarkCorerBean.add(markCorerBean10);
+        for (int i = 0; i <listMarkCorerBean.size() ; i++) {
+            databaseOperation.addmarkCorer(listMarkCorerBean.get(i));
+        }
+    }
 }

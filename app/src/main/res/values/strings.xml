@@ -131,4 +131,5 @@
     <string name="学生操作记录">学生操作记录</string>
     <string name="_1_2">1/2</string>
     <string name="tixing">提醒</string>
+    <string name="title_activity_obstacles">ObstaclesActivity</string>
 </resources>
