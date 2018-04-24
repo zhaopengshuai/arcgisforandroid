@@ -85,6 +85,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -141,6 +142,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     private LocationListener locationListener;
     private Handler handler;
     private int pointCount = 0;
+    private int pointCount1 = 0;
     LocationDisplayManager locationDisplayManager;
     DatabaseOperation databaseOperation;
     double x = 0;
@@ -174,11 +176,11 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                     String time = bundle.getString("time");
                     if (BeanUtil.isEmpty(confirmDialogPopWindow)) {
                         confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, position);
-                        databaseOperation.addRouteNews(position, time);
+                        databaseOperation.addRouteNews(position, time,"1");
                     } else {
                         confirmDialogPopWindow.dismiss();
                         confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, position);
-                        databaseOperation.addRouteNews(position, time);
+                        databaseOperation.addRouteNews(position, time,"1");
                     }
                     confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
                         @Override
@@ -339,9 +341,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 if (chkbox_isGuiJi.isChecked()) {
                     if (pointCount == 0) {
                         polygon.startPath(new Point(mapPoint.getX(), mapPoint.getY()));
-                        databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                        databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY(),"1",getNowDate());    //保存经纬度
                         x = wgspoint.getX();
                         y = wgspoint.getY();
+                        pointCount++;
                     } else {
                         if (chkbox_isLookGuiJi.isChecked()) {
                             if (isSelected) {
@@ -349,14 +352,14 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                             }
                             if (x == wgspoint.getX() || y == wgspoint.getY()) {
                             } else {
-                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY(),"1",getNowDate());    //保存经纬度
                             }
                             x = wgspoint.getX();
                             y = wgspoint.getY();
                         } else {
                             if (x == wgspoint.getX() || y == wgspoint.getY()) {
                             } else {
-                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY());    //保存经纬度
+                                databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY(),"1",getNowDate());    //保存经纬度
                             }
                             x = wgspoint.getX();
                             y = wgspoint.getY();
@@ -379,12 +382,24 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                         graphics = new Graphic(polygon, new SimpleLineSymbol(Color.RED, 2));
                         line.addGraphic(graphics);
                     }
+                    pointCount++;
+                }else {
+                    if (pointCount1 == 0) {
+                        long scale = (long) SPUtils.get(MainActivity.this, "scale", (long) -1);
+                        if (scale == -1) {
+                            mapView.setScale(500000);   //设置初始比例为5公里
+                        } else {
+                            mapView.setScale(scale * 100);
+                        }
+                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+                    }
+                    pointCount1++;
                 }
                 //判断是否为跟随模式
                 if (chk_isfollow.isChecked()) {
                     mapView.centerAt(mapPoint, true);
                 }
-                pointCount++;
+
 
             }
 
@@ -507,10 +522,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     //红圈位置
     private void markRedCircleLocation(Point point) {
         mapPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326), mapView.getSpatialReference());
-        this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16,
-                SimpleMarkerSymbol.STYLE.CIRCLE);
+        this.markerSymbol = new SimpleMarkerSymbol(Color.RED, 16, SimpleMarkerSymbol.STYLE.CIRCLE);
         Graphic graphic = new Graphic(mapPoint, markerSymbol);
         gLayerPos.addGraphic(graphic);
+
     }
 
     //添加覆盖物
@@ -543,6 +558,13 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 SimpleMarkerSymbol.STYLE.CIRCLE);
         Graphic graphic = new Graphic(mapPoint, markerSymbol);
         gLayerPos.addGraphic(graphic);
+    }
+
+    private void startTaiShi(){
+    // 假如回放时间从2018-04-24 12:03:00 到2018-04-24 12:11:00
+    // 收先取出这个时间段的位置数据 给家路线方案取出
+        List<QoistionBean> list = databaseOperation.querySetTimePoistion("2018-04-24 12:03:00","2018-04-24 12:11:00");
+
     }
 
 
@@ -688,7 +710,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     protected void onDestroy() {
         super.onDestroy();
 //        locationDisplayManager.stop();
-        databaseOperation.deletePoistion();
+//        databaseOperation.deletePoistion();
     }
 
     @Override
@@ -710,6 +732,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
     }
 
+    /**
+     * 权限管理
+     * @return
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
@@ -792,8 +818,18 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     }
     private void showToast(String string) {
         Toast.makeText(MainActivity.this, string, Toast.LENGTH_LONG).show();
+
     }
 
+    /**
+     * 获取系统当前时间
+     * @return
+     */
+    public static String getNowDate(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String nowTime=sdf.format(System.currentTimeMillis());
+        return nowTime;
+    }
     /**
      * 添加临时数据
      */

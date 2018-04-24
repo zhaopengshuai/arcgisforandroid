@@ -8,8 +8,25 @@ public class QoistionBean {
     public  String poistion;
     public String poistion_x;
     public  String poistion_y;
-
+    public  String routeType;
+    public  String poistionTime;
     public QoistionBean() {
+    }
+
+    public String getRouteType() {
+        return routeType;
+    }
+
+    public void setRouteType(String routeType) {
+        this.routeType = routeType;
+    }
+
+    public String getPoistionTime() {
+        return poistionTime;
+    }
+
+    public void setPoistionTime(String poistionTime) {
+        this.poistionTime = poistionTime;
     }
 
     public String getPoistion() {

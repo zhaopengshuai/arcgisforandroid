@@ -20,19 +20,19 @@
             android:text="@string/btn_isFollow"/>
         <CheckBox
             android:id="@+id/chkbox_isGuiJi"
-            android:checked="true"
+            android:checked="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"
+            android:layout_marginTop="@dimen/x70"
+            android:visibility="visible"
             android:text="启动轨迹"
             tools:ignore="HardcodedText" />
         <CheckBox
             android:id="@+id/chkbox_isLookGuiJi"
-            android:checked="true"
+            android:checked="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x80"
+            android:layout_marginTop="@dimen/x140"
             android:text="显示轨迹"
             tools:ignore="HardcodedText" />
 
@@ -41,7 +41,7 @@
             android:checked="false"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/x150"
+            android:layout_marginTop="@dimen/x210"
             android:text="障碍物"
             tools:ignore="HardcodedText" />
         <TextView
@@ -50,7 +50,7 @@
             android:layout_height="@dimen/x80"
             android:layout_marginLeft="@dimen/x30"
             android:gravity="center_vertical"
-            android:layout_marginTop="@dimen/x220"
+            android:layout_marginTop="@dimen/x280"
             android:text="机动路线历史记录"
             android:textColor="#000"
             tools:ignore="HardcodedText" />

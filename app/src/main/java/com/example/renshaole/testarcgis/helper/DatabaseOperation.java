@@ -9,6 +9,8 @@ import com.example.renshaole.testarcgis.bean.MarkCorerBean;
 import com.example.renshaole.testarcgis.bean.PictureBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
 import com.example.renshaole.testarcgis.bean.RouteNewsBean;
+import com.example.renshaole.testarcgis.bean.SituationBean;
+import com.example.renshaole.testarcgis.bean.StaffPositionBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,31 +31,34 @@ public class DatabaseOperation {
         this.context = context;
     }
 
-    // 添加Poistion表的记录
-    public void addPoistion(double X,double Y) {
+    // 添加Poistion轨迹经纬度表的记录
+    public void addPoistion(double X,double Y,String route,String time) {
         //获取操作数据库的工具类
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
             ContentValues valuse = new ContentValues();
             valuse.put(DateSheet.poistion.POISTION_X, X);
             valuse.put(DateSheet.poistion.POISTION_Y, Y);
+            valuse.put(DateSheet.poistion.ROUTE_TYPE, route);
+            valuse.put(DateSheet.poistion.POISTION_TIME, time);
             //参数(表名,可以为空了列名，ContentValues)
             db.insert(DateSheet.poistion.TABLE_NAME, DateSheet.poistion.POISTION_Y, valuse);
                        db.close();
     }
 
 
-    // 添加RouteNews表的记录
-    public void addRouteNews(String poistion,String time) {
+    // 添加RouteNews机动路线信息表的记录
+    public void addRouteNews(String poistion,String time,String route) {
         //获取操作数据库的工具类
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
         ContentValues valuse = new ContentValues();
         valuse.put(DateSheet.routeNews.POISTION, poistion);
         valuse.put(DateSheet.routeNews.STARTTIME, time);
+        valuse.put(DateSheet.routeNews.ROUTE_TYPE, route);
         //参数(表名,可以为空了列名，ContentValues)
         db.insert(DateSheet.routeNews.TABLE_NAME, DateSheet.routeNews.POISTION, valuse);
         db.close();
     }
-    // 添加markCorer表的记录
+    // 添加markCorer障碍物坐标表的记录
     public void addmarkCorer(MarkCorerBean markCorerBean) {
         //获取操作数据库的工具类
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -69,7 +74,7 @@ public class DatabaseOperation {
         db.endTransaction();
         db.close();
     }
-    // 添加Picture表的记录
+    // 添加Picture资源表的记录
     public void addPicture(PictureBean pictureBean) {
         //获取操作数据库的工具类
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -82,7 +87,38 @@ public class DatabaseOperation {
         db.close();
     }
 
-    //删除Poistion表的记录
+    // 添加situation态势表的记录
+    public void addSituation(SituationBean situationBean) {
+        //获取操作数据库的工具类
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues valuse = new ContentValues();
+        valuse.put(DateSheet.situation.ROUTE_TYPE, situationBean.getRoute_type());
+        valuse.put(DateSheet.situation.STARTTIME, situationBean.getStarttime());
+        valuse.put(DateSheet.situation.ENDTIME, situationBean.getEndtime());
+        valuse.put(DateSheet.situation.TIME, situationBean.getTimes());
+        //参数(表名,可以为空了列名，ContentValues)
+        db.insert(DateSheet.staffposition.TABLE_NAME, DateSheet.staffposition.TIME, valuse);
+        db.close();
+    }
+
+    // 添加staffposition所有人员位置信息表的记录
+    public void addStaffSosition(StaffPositionBean staffPositionBean) {
+        //获取操作数据库的工具类
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        ContentValues valuse = new ContentValues();
+        valuse.put(DateSheet.staffposition.ROUTE_TYPE, staffPositionBean.getRoute_type());
+        valuse.put(DateSheet.staffposition.USERTYPE, staffPositionBean.getUserType());
+        valuse.put(DateSheet.staffposition.USERID, staffPositionBean.getUserID());
+        valuse.put(DateSheet.staffposition.POISTION_X, staffPositionBean.getPoistion_x());
+        valuse.put(DateSheet.staffposition.POISTION_Y, staffPositionBean.getPoistion_y());
+        valuse.put(DateSheet.staffposition.TIME, staffPositionBean.getTimes());
+        //参数(表名,可以为空了列名，ContentValues)
+        db.insert(DateSheet.staffposition.TABLE_NAME, DateSheet.staffposition.TIME, valuse);
+        db.close();
+    }
+
+
+    //删除Poistion轨迹经纬度表的记录
     public void deletePoistion() {
             SQLiteDatabase db = databaseHelper.getWritableDatabase();
             //表名，条件，条件的值
@@ -108,17 +144,38 @@ public class DatabaseOperation {
         db.close();
     }
 
-    //查询QoistionBean全部类型
+    //查询Qoistion轨迹经纬度全部类型
     public ArrayList<QoistionBean> queryPoistion() {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        //是否去重复记录，表名，要查询的列，查询条件，查询条件的值，分组条件，分组条件的值，排序，分页条件
-        Cursor c = db.query(DateSheet.poistion.TABLE_NAME, null, null , null, null, null, DateSheet.poistion._ID + " DESC");
+        //是否去重复记录，表名，要查询的列，查询条件，查询条件的值，分组条件，分组条件的值，排序，分页条件2018-04-24 12:03:00 到2018-04-24 12:11:00
+        Cursor c = db.query(DateSheet.poistion.TABLE_NAME, null, null , null, null, null, DateSheet.poistion.POISTION_TIME + " ASC");
         ArrayList<QoistionBean> qoistionBeans = new ArrayList();
         QoistionBean qoistionBean = null;
         while (c.moveToNext()) {
             qoistionBean = new QoistionBean();
             qoistionBean.setPoistion_x(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_X)));
             qoistionBean.setPoistion_y(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_Y)));
+            qoistionBean.setRouteType(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.ROUTE_TYPE)));
+            qoistionBean.setPoistionTime(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_TIME)));
+            qoistionBeans.add(qoistionBean);
+        }
+        c.close();
+        db.close();
+        return qoistionBeans;
+    }
+    //根据时间查询Qoistion轨迹经纬度
+    public ArrayList<QoistionBean> querySetTimePoistion(String startTime,String endTime) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        ArrayList<QoistionBean> qoistionBeans = new ArrayList();
+        String sql = "select * from  poistion where  poistion_time between '" + startTime + "'and '" + endTime + "'  order by poistion_time ASC ";
+        Cursor c = db.rawQuery(sql, null);
+        QoistionBean qoistionBean = null;
+        while (c.moveToNext()) {
+            qoistionBean = new QoistionBean();
+            qoistionBean.setPoistion_x(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_X)));
+            qoistionBean.setPoistion_y(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_Y)));
+            qoistionBean.setRouteType(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.ROUTE_TYPE)));
+            qoistionBean.setPoistionTime(c.getString(c.getColumnIndexOrThrow(DateSheet.poistion.POISTION_TIME)));
             qoistionBeans.add(qoistionBean);
         }
         c.close();

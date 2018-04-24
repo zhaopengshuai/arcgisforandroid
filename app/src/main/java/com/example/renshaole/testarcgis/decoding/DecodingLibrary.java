@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 import com.esri.core.geometry.Point;
 import com.example.renshaole.testarcgis.App;
+import com.example.renshaole.testarcgis.bean.SituationBean;
+import com.example.renshaole.testarcgis.bean.StaffPositionBean;
+import com.example.renshaole.testarcgis.helper.DatabaseOperation;
 import com.example.renshaole.testarcgis.widget.Entity;
 import com.example.renshaole.testarcgis.widget.MyMessage;
 
@@ -34,12 +37,14 @@ public class DecodingLibrary {
 	private int lenMin = 50;
 	private Handler hd;
 	private Handler handler;
-	private static Map<String, Entity> locationMap = new HashMap<String, Entity>();
+	private static Map<String, Entity> locationMap = new HashMap<>();
 	private Context context;
+	private DatabaseOperation databaseOperation;
 	public DecodingLibrary(Handler hd, Context context) {
 		this.hd = hd;
 		this.context=context;
 		app= (App) context.getApplicationContext();
+		databaseOperation=new DatabaseOperation(context);
 		handler=app.getmHandler();
 	}
 
@@ -64,7 +69,18 @@ public class DecodingLibrary {
 		if(strArray[4].equals("1505"))
 		{
 			//如果编码是1505（位置广播），那么将实体对应的位置信息进行更新。
-			updateEntityLocation(strArray[6], strArray[7], strArray[8]);
+			StaffPositionBean staffPositionBean =new StaffPositionBean();
+			String[] values = strArray[7].split("\\+");
+			String locx = values[0];
+			String locy = values[1];
+			staffPositionBean.setRoute_type("1");
+			staffPositionBean.setUserID(strArray[2]);
+			staffPositionBean.setUserType(strArray[8]);
+			staffPositionBean.setPoistion_x(locx);
+			staffPositionBean.setPoistion_y(locy);
+			staffPositionBean.setTimes(strArray[10]);
+			databaseOperation.addStaffSosition(staffPositionBean);
+			updateEntityLocation(strArray[2], strArray[7], strArray[8]);
 		}else if (strArray[4].equals("2602")){
 			//如果编码是2602（位置广播），那么将实体对应的位置信息进行更新。
 			Message msg=new Message();
@@ -75,6 +91,11 @@ public class DecodingLibrary {
 			msg.setData(bundle);
 			handler.sendMessage(msg);
 
+		}else if (strArray[4].equals("3000")){
+			//如果编码是3000（位置广播），那么将实体对应的位置信息进行更新。
+			SituationBean situationBean =new SituationBean();
+
+			databaseOperation.addSituation(situationBean);
 		}
 	}
 
