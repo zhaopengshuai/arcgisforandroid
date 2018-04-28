@@ -1,5 +1,7 @@
 package com.example.renshaole.testarcgis.bean;
 
+import com.esri.core.geometry.Point;
+
 /**
  * Created by admin on 2018/4/23.
  */
@@ -11,8 +13,16 @@ public class StaffPositionBean {
     public  String times;    //接受信息时间
     public  String poistion_x;
     public  String poistion_y;
-
+    public Point locationPoint;
     public StaffPositionBean() {
+    }
+
+    public Point getLocationPoint() {
+        return locationPoint;
+    }
+
+    public void setLocationPoint(Point locationPoint) {
+        this.locationPoint = locationPoint;
     }
 
     public String getRoute_type() {

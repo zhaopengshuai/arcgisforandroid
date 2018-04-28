@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.esri.core.geometry.Point;
 import com.example.renshaole.testarcgis.bean.MarkCorerBean;
 import com.example.renshaole.testarcgis.bean.PictureBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
@@ -97,7 +98,7 @@ public class DatabaseOperation {
         valuse.put(DateSheet.situation.ENDTIME, situationBean.getEndtime());
         valuse.put(DateSheet.situation.TIME, situationBean.getTimes());
         //参数(表名,可以为空了列名，ContentValues)
-        db.insert(DateSheet.staffposition.TABLE_NAME, DateSheet.staffposition.TIME, valuse);
+        db.insert(DateSheet.situation.TABLE_NAME, DateSheet.staffposition.ROUTE_TYPE, valuse);
         db.close();
     }
 
@@ -163,6 +164,29 @@ public class DatabaseOperation {
         db.close();
         return qoistionBeans;
     }
+    //根据时间查询staffposition所有人员位置信息表的记录
+    public ArrayList<StaffPositionBean> queryStaffposition(String startTime,String endTime) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        ArrayList<StaffPositionBean> staffPositionBeanArrayList = new ArrayList();
+        String sql = "select * from  staffposition where  time between '" + startTime + "'and '" + endTime + "'  order by time ASC ";
+        Cursor c = db.rawQuery(sql, null);
+        StaffPositionBean staffPositionBean = null;
+        while (c.moveToNext()) {
+            staffPositionBean = new StaffPositionBean();
+            staffPositionBean.setPoistion_x(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.POISTION_X)));
+            staffPositionBean.setPoistion_y(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.POISTION_Y)));
+            staffPositionBean.setRoute_type(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.ROUTE_TYPE)));
+            staffPositionBean.setTimes(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.TIME)));
+            staffPositionBean.setUserID(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.USERID)));
+            staffPositionBean.setUserType(c.getString(c.getColumnIndexOrThrow(DateSheet.staffposition.USERTYPE)));
+            Point point = new Point(Double.parseDouble(staffPositionBean.getPoistion_x()), Double.parseDouble(staffPositionBean.getPoistion_y()));
+            staffPositionBean.setLocationPoint(point);
+            staffPositionBeanArrayList.add(staffPositionBean);
+        }
+        c.close();
+        db.close();
+        return staffPositionBeanArrayList;
+    }
     //根据时间查询Qoistion轨迹经纬度
     public ArrayList<QoistionBean> querySetTimePoistion(String startTime,String endTime) {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
@@ -182,7 +206,25 @@ public class DatabaseOperation {
         db.close();
         return qoistionBeans;
     }
-    //查询RouteNews全部类型
+    //根据状态查询situation态势表的记录 （按理说应该查询全部态势列表，然后根据选择哪一项进行态势回放）
+    public ArrayList<SituationBean> querySituation(String type) {
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        ArrayList<SituationBean> situationBeanArrayList = new ArrayList();
+        String sql = "select * from  situation where  route_type = '" + type + "'";
+        Cursor c = db.rawQuery(sql, null);
+        SituationBean situationBean;
+        while (c.moveToNext()) {
+            situationBean =new SituationBean();
+            situationBean.setRoute_type(c.getString(c.getColumnIndexOrThrow(DateSheet.situation.ROUTE_TYPE)));
+            situationBean.setStarttime(c.getString(c.getColumnIndexOrThrow(DateSheet.situation.STARTTIME)));
+            situationBean.setEndtime(c.getString(c.getColumnIndexOrThrow(DateSheet.situation.ENDTIME)));
+            situationBeanArrayList.add(situationBean);
+        }
+        c.close();
+        db.close();
+        return situationBeanArrayList;
+    }
+    //查询RouteNews机动路线信息表的记录
     public ArrayList<RouteNewsBean> queryRouteNews() {
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         //是否去重复记录，表名，要查询的列，查询条件，查询条件的值，分组条件，分组条件的值，排序，分页条件
@@ -194,6 +236,7 @@ public class DatabaseOperation {
             routeNewsBean.setId(c.getLong(c.getColumnIndexOrThrow(DateSheet.routeNews._ID)));
             routeNewsBean.setPoistion(c.getString(c.getColumnIndexOrThrow(DateSheet.routeNews.POISTION)));
             routeNewsBean.setStartTime(c.getString(c.getColumnIndexOrThrow(DateSheet.routeNews.STARTTIME)));
+            routeNewsBean.setRoute_type(c.getString(c.getColumnIndexOrThrow(DateSheet.routeNews.ROUTE_TYPE)));
             routeNewsBeanArrayList.add(routeNewsBean);
         }
         c.close();

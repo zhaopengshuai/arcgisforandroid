@@ -8,8 +8,17 @@ public class RouteNewsBean {
     public long id;
     public String poistion;
     public String startTime;
+    public  String route_type;      //路线方案类型
 
     public RouteNewsBean() {
+    }
+
+    public String getRoute_type() {
+        return route_type;
+    }
+
+    public void setRoute_type(String route_type) {
+        this.route_type = route_type;
     }
 
     public long getId() {

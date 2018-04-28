@@ -81,7 +81,8 @@
 
         <activity android:name=".RouteNewsActivity" />
         <activity android:name=".ObstacleActivity" />
-        <activity android:name=".AddPbstacleActivity"></activity>
+        <activity android:name=".AddPbstacleActivity" />
+        <activity android:name=".TaiShiJiLuActivity"></activity>
     </application>
 
 </manifest>

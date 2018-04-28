@@ -2,6 +2,7 @@ package com.example.renshaole.testarcgis;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -126,6 +127,8 @@ public class ConnectIPActivity extends MyBaseActivity {
 					dialog.setCancelable(false);
 					dialog.show();
 					WorkService.workThread.connectNet(ip, port);
+					Intent intent = new Intent(ConnectIPActivity.this, MainActivity.class);
+					startActivity(intent);
 				}
 			}
 		});

@@ -35,6 +35,16 @@
             android:layout_marginTop="@dimen/x140"
             android:text="显示轨迹"
             tools:ignore="HardcodedText" />
+        <TextView
+            android:id="@+id/tvTaiShi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/x160"
+            android:text="开始态势回放"
+            android:textColor="#000"
+            tools:ignore="HardcodedText" />
 
         <CheckBox
             android:id="@+id/chkbox_Corer"
@@ -82,7 +92,7 @@
             android:text=""
             android:layout_gravity="bottom"
             tools:ignore="HardcodedText,RtlHardcoded" />
-        <TextView
+        <com.example.renshaole.testarcgis.utils.MapScaleView
             android:id="@+id/tvScale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

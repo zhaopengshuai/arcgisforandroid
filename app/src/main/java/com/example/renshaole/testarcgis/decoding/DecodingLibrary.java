@@ -41,6 +41,7 @@ public class DecodingLibrary {
 	private Context context;
 	private DatabaseOperation databaseOperation;
 	public DecodingLibrary(Handler hd, Context context) {
+
 		this.hd = hd;
 		this.context=context;
 		app= (App) context.getApplicationContext();
@@ -91,10 +92,12 @@ public class DecodingLibrary {
 			msg.setData(bundle);
 			handler.sendMessage(msg);
 
-		}else if (strArray[4].equals("3000")){
+		}else if (strArray[1].equals("3000")){
 			//如果编码是3000（位置广播），那么将实体对应的位置信息进行更新。
 			SituationBean situationBean =new SituationBean();
-
+			situationBean.setRoute_type(strArray[2]);
+			situationBean.setStarttime(strArray[3]);
+			situationBean.setEndtime(strArray[4]);
 			databaseOperation.addSituation(situationBean);
 		}
 	}

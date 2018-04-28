@@ -12,11 +12,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.icu.math.BigDecimal;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -59,7 +61,10 @@ import com.esri.core.symbol.SimpleMarkerSymbol;
 import com.example.renshaole.testarcgis.bean.MarkCorerBean;
 import com.example.renshaole.testarcgis.bean.PictureBean;
 import com.example.renshaole.testarcgis.bean.QoistionBean;
+import com.example.renshaole.testarcgis.bean.RouteNewsBean;
 import com.example.renshaole.testarcgis.bean.ScaleBean;
+import com.example.renshaole.testarcgis.bean.SituationBean;
+import com.example.renshaole.testarcgis.bean.StaffPositionBean;
 import com.example.renshaole.testarcgis.decoding.DecodingLibrary;
 import com.example.renshaole.testarcgis.helper.DatabaseHelper;
 import com.example.renshaole.testarcgis.helper.DatabaseOperation;
@@ -69,6 +74,7 @@ import com.example.renshaole.testarcgis.location.GPSProviderStatus;
 import com.example.renshaole.testarcgis.pop.ConfirmDialogPopWindow;
 import com.example.renshaole.testarcgis.utils.BeanUtil;
 import com.example.renshaole.testarcgis.utils.FileUtil;
+import com.example.renshaole.testarcgis.utils.MapScaleView;
 import com.example.renshaole.testarcgis.utils.SPUtils;
 import com.example.renshaole.testarcgis.utils.util;
 import com.example.renshaole.testarcgis.widget.Entity;
@@ -85,8 +91,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -100,6 +109,8 @@ import static com.example.renshaole.testarcgis.utils.util.CORER_ZHUANGZHAI;
 
 
 public class MainActivity extends AdaptationActivity implements DrawEventListener {
+
+    Map<String, StaffPositionBean> locationMap = new HashMap<>();
     Polyline polygon;
     Graphic graphics;
     private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
@@ -118,7 +129,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     CheckBox chkbox_isLookGuiJi;
     Point point;
     Point wgspoint;
-    TextView tvScale;
+    MapScaleView tvScale;
     TextView tvX;
     TextView tvY;
     TextView tvRouteNews;
@@ -127,6 +138,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     GraphicsLayer markCover;
     GraphicsLayer gCurrentLayerPos;
     GraphicsLayer line;
+    GraphicsLayer taishiLayer;
     PictureMarkerSymbol locationSymbol;
     PictureMarkerSymbol currentLocationSymbol;
     LocationManager locMag;
@@ -156,6 +168,14 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     private GPSLocationManager gpsLocationManager;
     private List<PictureBean>  list;
     private List<MarkCorerBean>  listMarkCorerBean;
+    private long startTime;
+    private long endTime;
+    int aaaa = 0;
+    int state = 0;
+    private TextView tvTaiShi;
+    private CountDownTimer mCountDownTimer;
+    private long sTime;
+    private long aTime;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint({"MissingPermission", "HandlerLeak"})
@@ -211,6 +231,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         tvScale = findViewById(R.id.tvScale);
         tvX = findViewById(R.id.tvX);
         tvY = findViewById(R.id.tvY);
+        tvTaiShi = findViewById(R.id.tvTaiShi);
         tvRouteNews = findViewById(R.id.tvRouteNews);
         chk_isfollow = this.findViewById(R.id.chkbox_isFollow);
         chkbox_Corer = this.findViewById(R.id.chkbox_Corer);
@@ -218,7 +239,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         chkbox_isLookGuiJi = this.findViewById(R.id.chkbox_isLookGuiJi);
         GPS_btn = findViewById(R.id.GPS_btn);
         mapView = this.findViewById(R.id.map);
-
+        tvScale.setMapView(mapView);
 //        MarkCorerBean markCorerBean =new MarkCorerBean();
 //        markCorerBean.setStart("1");
 //        markCorerBean.setType("10");
@@ -301,13 +322,15 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         mapView.addLayer(gCurrentLayerPos);
         line = new GraphicsLayer();
         mapView.addLayer(line);
+        taishiLayer = new GraphicsLayer();
+        mapView.addLayer(taishiLayer);
         locationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.location));
-        currentLocationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.mipmap.ic_launcher));
+        currentLocationSymbol = new PictureMarkerSymbol(this.getResources().getDrawable(R.drawable.icon_openmap_mark));
         locMag = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         GPS_btn.setOnClickListener(new OnClickListener() {
             @SuppressLint("MissingPermission")
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // TODO Auto-generate0 id method stub
                 locationDisplayManager.setAutoPanMode(LocationDisplayManager.AutoPanMode.LOCATION);//设置模式
                 locationDisplayManager.start();
             }
@@ -329,8 +352,8 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
                 Log.d("AAA", "Lon:" + df.format(lon) + " , " + "Lat:" + df.format(lat));
                 wgspoint = new Point(lon, lat);
-                tvX.setText("纬度：" + wgspoint.getX());
-                tvY.setText("经度：" + wgspoint.getY());
+                tvX.setText("纬度：" +   new DecimalFormat("#.000000").format(wgspoint.getX()));
+                tvY.setText("经度：" + new DecimalFormat("#.000000").format(wgspoint.getY()));
                 String locStr = getCurrentLocation(location);
                 MyMessage.MSG_ENTITYLOCXY = locStr;
 //                dataHelper.addTask(wgspoint.getX(),wgspoint.getY());
@@ -373,7 +396,8 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                         } else {
                             mapView.setScale(scale * 100);
                         }
-                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+//                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+                        tvScale.refreshScaleView();
                     }
 
                     if (!chkbox_isLookGuiJi.isChecked()) {
@@ -391,7 +415,8 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                         } else {
                             mapView.setScale(scale * 100);
                         }
-                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+//                        ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+                        tvScale.refreshScaleView();
                     }
                     pointCount1++;
                 }
@@ -467,21 +492,45 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             public void postAction(float v, float v1, double v2) {
                 double scales = mapView.getScale() / 100;//结果单位米，表示图上1厘米代表*米
                 SPUtils.put(MainActivity.this, "scale", (long) scales);
-                ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+//                ScaleBean.refreshScaleView(MainActivity.this, tvScale, mapView);
+                tvScale.refreshScaleView();
             }
         });
+        tvTaiShi.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (state ==0) {
+                    aaaa=0;
+                    startTaiShi();
+                    tvTaiShi.setText("结束态势回放");
+                    state=1;
+                }else {
+                    taishiLayer.removeAll();
+                    gCurrentLayerPos.removeAll();
+                    mCountDownTimer.cancel();
+                    tvTaiShi.setText("开始态势回放");
+                    state=0;
+                }
 
+            }
+        });
 //        getCurrentEntityInfo();
 //        gpsLocationManager.start(new MyListener());
 
         //添加测试数据
-//        addPicture();
-//        addlistMarkCorerBean();
+        String data_start = (String) SPUtils.get(MainActivity.this, "data_start", "");
+        if (data_start.equals("")) {
+            addPicture();
+            addlistMarkCorerBean();
+            SPUtils.put(MainActivity.this,"data_start","0");
+        }
+
     }
 
 
     private void drawOtherMarks() {
         gLayerPos.removeAll();
+
         Map<String, Entity> locationMap = DecodingLibrary.getEntityLocationMap();
         for (Map.Entry<String, Entity> entry : locationMap.entrySet()) {
             if (entry.getValue().sideCode.equals(Entity.SIDE_RED)) {
@@ -542,11 +591,17 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             //自定义图片大小
 //            Bitmap newBmp = Bitmap.createScaledBitmap(bmp, 160, 160, true);
             //将bitmap转化为Drawable,这是新的方法,如果用过时的方法Drawable drawable  = new BitmapDrawable(newBmp),则会造成图片大小和原来图片大小不符的情况,当然这种情况发生在没有自定义大小的情况下
-             drawable  = new BitmapDrawable(res,bmp);
-            pictureMarkerSymbol = new PictureMarkerSymbol(MainActivity.this, drawable);
+            if (BeanUtil.isNotEmpty(bmp)) {
+                drawable  = new BitmapDrawable(res,bmp);
+                pictureMarkerSymbol = new PictureMarkerSymbol(MainActivity.this, drawable);
 //            pictureMarkerSymbol.setUrl();
-            Graphic graphic = new Graphic(mapPoint, pictureMarkerSymbol);
-            markCover.addGraphic(graphic);
+                Graphic graphic = new Graphic(mapPoint, pictureMarkerSymbol);
+                markCover.addGraphic(graphic);
+            }else {
+                Toast.makeText(MainActivity.this, "请检查"+FileUtil.getSDCardPath() + "/DCIM"+"是否有覆盖物图片",Toast.LENGTH_SHORT).show();
+                break;
+            }
+
         }
 
     }
@@ -560,11 +615,88 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         gLayerPos.addGraphic(graphic);
     }
 
+
+    /**
+     * 态势回放
+     */
     private void startTaiShi(){
     // 假如回放时间从2018-04-24 12:03:00 到2018-04-24 12:11:00
-    // 收先取出这个时间段的位置数据 给家路线方案取出
-        List<QoistionBean> list = databaseOperation.querySetTimePoistion("2018-04-24 12:03:00","2018-04-24 12:11:00");
-
+    // 先取出这个时间段的位置数据 根据路线方案取出
+        List<SituationBean> situationBeanArrayList= databaseOperation.querySituation("1");      //查询态势开始时间和结束时间
+        final List<QoistionBean> list = databaseOperation.querySetTimePoistion(situationBeanArrayList.get(0).getStarttime(),situationBeanArrayList.get(0).getEndtime());
+        final List<StaffPositionBean> staffPositionBeanList = databaseOperation.queryStaffposition(situationBeanArrayList.get(0).getStarttime(),situationBeanArrayList.get(0).getEndtime());
+         final List<RouteNewsBean> listRouteNewsBean=databaseOperation.queryRouteNews();
+        try {
+            startTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getStarttime()));
+             endTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getEndtime()));
+            final long time= endTime-startTime;
+            polygon = new Polyline();
+            taishiLayer.removeAll();
+            mCountDownTimer =   new CountDownTimer(time, 1000) {
+                //当前任务每完成一次倒计时间隔时间时回调
+                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                public void onTick(long millisUntilFinished) {
+                  String  times= convertDate2(startTime+=1000);
+                    for (int i = 0; i <listRouteNewsBean.size() ; i++) {
+                        if (listRouteNewsBean.get(i).getStartTime().equals(times)) {
+                            if (BeanUtil.isEmpty(confirmDialogPopWindow)) {
+                                confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
+                            } else {
+                                confirmDialogPopWindow.dismiss();
+                                confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
+                            }
+                            confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialogPopWindow.dismiss();
+                                }
+                            });
+                            confirmDialogPopWindow.setBtnQueDingOnClickListener(new OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    confirmDialogPopWindow.dismiss();
+                                }
+                            });
+                        }
+                    }
+                    for (int i = 0; i <staffPositionBeanList.size() ; i++) {
+                        if (staffPositionBeanList.get(i).getTimes().equals(times)) {
+                            locationMap.put(staffPositionBeanList.get(i).getUserID(), staffPositionBeanList.get(i));
+                        }
+                    }
+                    gLayerPos.removeAll();
+                    for (Map.Entry<String, StaffPositionBean> entry : locationMap.entrySet()) {
+                            if (entry.getValue().getUserType().equals(Entity.SIDE_RED)) {
+                                markRedCircleLocation(entry.getValue().getLocationPoint());
+                            } else if (entry.getValue().getUserType().equals(Entity.SIDE_BLUE)) {
+                                markBlueCircleLocation(entry.getValue().getLocationPoint());
+                            }
+                    }
+                    for (int i = 0; i <list.size() ; i++) {
+                        if (list.get(i).getPoistionTime().equals(times)) {
+                            gCurrentLayerPos.removeAll();
+                            wgspoint = new Point(Double.parseDouble(list.get(i).getPoistion_x()), Double.parseDouble(list.get(i).getPoistion_y()));
+                            mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
+//                            if (aaaa == 0) {
+//                                polygon.startPath(new Point(mapPoint.getX(), mapPoint.getY()));
+//                            } else {
+//                                polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
+//                            }
+//                            aaaa++;
+//                            graphics = new Graphic(polygon, new SimpleLineSymbol(Color.RED, 2));
+//                            taishiLayer.addGraphic(graphics);
+                            Graphic graphic = new Graphic(mapPoint, currentLocationSymbol);
+                            gCurrentLayerPos.addGraphic(graphic);
+                        }
+                    }
+                }
+                //完成是回调
+                public void onFinish() {
+                }
+            }.start();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -829,6 +961,28 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String nowTime=sdf.format(System.currentTimeMillis());
         return nowTime;
+    }
+    /**
+     * 根据日期转毫秒
+     * @param s
+     */
+    public static String dateToStamp(String s) throws ParseException {
+        String res;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = simpleDateFormat.parse(s);
+        long ts = date.getTime();
+        res = String.valueOf(ts);
+        return res;
+    }
+    /**
+     * 根据毫秒转换日期
+     * @param time
+     */
+    public static String convertDate2(Long time){
+        Date d = new Date(time);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String s = sdf.format(d);
+        return s;
     }
     /**
      * 添加临时数据

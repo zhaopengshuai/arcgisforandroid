@@ -179,6 +179,7 @@ public class SettingsActivity extends MyBaseActivity {
 		isZiDongChongLian = false;
 		Intent intent = new Intent(this, ConnectionSettingsActivity.class);
 		startActivityForResult(intent, 1);
+		finish();
 	}
 
 	/**
