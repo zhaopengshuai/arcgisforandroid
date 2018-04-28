@@ -842,7 +842,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     protected void onDestroy() {
         super.onDestroy();
 //        locationDisplayManager.stop();
-//        databaseOperation.deletePoistion();
+        databaseOperation.deletePoistion();
     }
 
     @Override
