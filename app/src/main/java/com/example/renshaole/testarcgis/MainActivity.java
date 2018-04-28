@@ -507,7 +507,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 }else {
                     taishiLayer.removeAll();
                     gCurrentLayerPos.removeAll();
-                    mCountDownTimer.cancel();
+                    if (BeanUtil.isNotEmpty(mCountDownTimer) ) {
+                        mCountDownTimer.cancel();
+
+                    }
                     tvTaiShi.setText("开始态势回放");
                     state=0;
                 }
@@ -623,60 +626,62 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     // 假如回放时间从2018-04-24 12:03:00 到2018-04-24 12:11:00
     // 先取出这个时间段的位置数据 根据路线方案取出
         List<SituationBean> situationBeanArrayList= databaseOperation.querySituation("1");      //查询态势开始时间和结束时间
-        final List<QoistionBean> list = databaseOperation.querySetTimePoistion(situationBeanArrayList.get(0).getStarttime(),situationBeanArrayList.get(0).getEndtime());
-        final List<StaffPositionBean> staffPositionBeanList = databaseOperation.queryStaffposition(situationBeanArrayList.get(0).getStarttime(),situationBeanArrayList.get(0).getEndtime());
-         final List<RouteNewsBean> listRouteNewsBean=databaseOperation.queryRouteNews();
-        try {
-            startTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getStarttime()));
-             endTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getEndtime()));
-            final long time= endTime-startTime;
-            polygon = new Polyline();
-            taishiLayer.removeAll();
-            mCountDownTimer =   new CountDownTimer(time, 1000) {
-                //当前任务每完成一次倒计时间隔时间时回调
-                @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-                public void onTick(long millisUntilFinished) {
-                  String  times= convertDate2(startTime+=1000);
-                    for (int i = 0; i <listRouteNewsBean.size() ; i++) {
-                        if (listRouteNewsBean.get(i).getStartTime().equals(times)) {
-                            if (BeanUtil.isEmpty(confirmDialogPopWindow)) {
-                                confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
-                            } else {
-                                confirmDialogPopWindow.dismiss();
-                                confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
+        if (BeanUtil.isNotEmpty(situationBeanArrayList)) {
+            final List<QoistionBean> list = databaseOperation.querySetTimePoistion(situationBeanArrayList.get(0).getStarttime(), situationBeanArrayList.get(0).getEndtime());
+            final List<StaffPositionBean> staffPositionBeanList = databaseOperation.queryStaffposition(situationBeanArrayList.get(0).getStarttime(), situationBeanArrayList.get(0).getEndtime());
+            final List<RouteNewsBean> listRouteNewsBean = databaseOperation.queryRouteNews();
+            try {
+                startTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getStarttime()));
+                endTime = Long.parseLong(dateToStamp(situationBeanArrayList.get(0).getEndtime()));
+                final long time = endTime - startTime;
+
+                polygon = new Polyline();
+                taishiLayer.removeAll();
+                mCountDownTimer = new CountDownTimer(time, 1000) {
+                    //当前任务每完成一次倒计时间隔时间时回调
+                    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+                    public void onTick(long millisUntilFinished) {
+                        String times = convertDate2(startTime += 1000);
+                        for (int i = 0; i < listRouteNewsBean.size(); i++) {
+                            if (listRouteNewsBean.get(i).getStartTime().equals(times)) {
+                                if (BeanUtil.isEmpty(confirmDialogPopWindow)) {
+                                    confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
+                                } else {
+                                    confirmDialogPopWindow.dismiss();
+                                    confirmDialogPopWindow = new ConfirmDialogPopWindow(MainActivity.this, listRouteNewsBean.get(i).getPoistion());
+                                }
+                                confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        confirmDialogPopWindow.dismiss();
+                                    }
+                                });
+                                confirmDialogPopWindow.setBtnQueDingOnClickListener(new OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        confirmDialogPopWindow.dismiss();
+                                    }
+                                });
                             }
-                            confirmDialogPopWindow.setBtnQuXiaoOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    confirmDialogPopWindow.dismiss();
-                                }
-                            });
-                            confirmDialogPopWindow.setBtnQueDingOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    confirmDialogPopWindow.dismiss();
-                                }
-                            });
                         }
-                    }
-                    for (int i = 0; i <staffPositionBeanList.size() ; i++) {
-                        if (staffPositionBeanList.get(i).getTimes().equals(times)) {
-                            locationMap.put(staffPositionBeanList.get(i).getUserID(), staffPositionBeanList.get(i));
+                        for (int i = 0; i < staffPositionBeanList.size(); i++) {
+                            if (staffPositionBeanList.get(i).getTimes().equals(times)) {
+                                locationMap.put(staffPositionBeanList.get(i).getUserID(), staffPositionBeanList.get(i));
+                            }
                         }
-                    }
-                    gLayerPos.removeAll();
-                    for (Map.Entry<String, StaffPositionBean> entry : locationMap.entrySet()) {
+                        gLayerPos.removeAll();
+                        for (Map.Entry<String, StaffPositionBean> entry : locationMap.entrySet()) {
                             if (entry.getValue().getUserType().equals(Entity.SIDE_RED)) {
                                 markRedCircleLocation(entry.getValue().getLocationPoint());
                             } else if (entry.getValue().getUserType().equals(Entity.SIDE_BLUE)) {
                                 markBlueCircleLocation(entry.getValue().getLocationPoint());
                             }
-                    }
-                    for (int i = 0; i <list.size() ; i++) {
-                        if (list.get(i).getPoistionTime().equals(times)) {
-                            gCurrentLayerPos.removeAll();
-                            wgspoint = new Point(Double.parseDouble(list.get(i).getPoistion_x()), Double.parseDouble(list.get(i).getPoistion_y()));
-                            mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
+                        }
+                        for (int i = 0; i < list.size(); i++) {
+                            if (list.get(i).getPoistionTime().equals(times)) {
+                                gCurrentLayerPos.removeAll();
+                                wgspoint = new Point(Double.parseDouble(list.get(i).getPoistion_x()), Double.parseDouble(list.get(i).getPoistion_y()));
+                                mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
 //                            if (aaaa == 0) {
 //                                polygon.startPath(new Point(mapPoint.getX(), mapPoint.getY()));
 //                            } else {
@@ -685,17 +690,20 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 //                            aaaa++;
 //                            graphics = new Graphic(polygon, new SimpleLineSymbol(Color.RED, 2));
 //                            taishiLayer.addGraphic(graphics);
-                            Graphic graphic = new Graphic(mapPoint, currentLocationSymbol);
-                            gCurrentLayerPos.addGraphic(graphic);
+                                Graphic graphic = new Graphic(mapPoint, currentLocationSymbol);
+                                gCurrentLayerPos.addGraphic(graphic);
+                            }
                         }
+
                     }
-                }
-                //完成是回调
-                public void onFinish() {
-                }
-            }.start();
-        } catch (ParseException e) {
-            e.printStackTrace();
+
+                    //完成是回调
+                    public void onFinish() {
+                    }
+                }.start();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 
