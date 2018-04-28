@@ -359,7 +359,6 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 //                dataHelper.addTask(wgspoint.getX(),wgspoint.getY());
 //                dataHelper.GetUserList();
                 mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
-
                 //判断是否开启轨迹
                 if (chkbox_isGuiJi.isChecked()) {
                     if (pointCount == 0) {
@@ -370,9 +369,10 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                         pointCount++;
                     } else {
                         if (chkbox_isLookGuiJi.isChecked()) {
-                            if (isSelected) {
-                                polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
-                            }
+//                            if (isSelected) {
+//                                polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
+//                            }
+                            polygon.lineTo(new Point(mapPoint.getX(), mapPoint.getY()));
                             if (x == wgspoint.getX() || y == wgspoint.getY()) {
                             } else {
                                 databaseOperation.addPoistion(wgspoint.getX(), wgspoint.getY(),"1",getNowDate());    //保存经纬度
