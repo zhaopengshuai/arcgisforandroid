@@ -127,8 +127,8 @@ public class ConnectIPActivity extends MyBaseActivity {
 					dialog.setCancelable(false);
 					dialog.show();
 					WorkService.workThread.connectNet(ip, port);
-					Intent intent = new Intent(ConnectIPActivity.this, MainActivity.class);
-					startActivity(intent);
+					//Intent intent = new Intent(ConnectIPActivity.this, MainActivity.class);//开始连接不跳转主页面，等到连接成功后再跳 gao
+					//startActivity(intent);
 				}
 			}
 		});
@@ -230,11 +230,18 @@ public class ConnectIPActivity extends MyBaseActivity {
 							(result == 1) ? MyGlobal.toast_success
 									: MyGlobal.toast_fail);
 					theActivity.dialog.cancel();
+
+					//连接成功，跳到主界面 gao
+					if(result == 1){
+						MainActivity.start(theActivity);
+					}
 					break;
 				}
 			}
 		}
 	}
+
+
 
 	@Override
 	public void exc() {

@@ -107,7 +107,8 @@ public class MapScaleView extends View {
         mPaint.setTextSize(textSize);
         mPaint.setTypeface(Typeface.DEFAULT_BOLD);
         float textWidth = mPaint.measureText(text);
-        canvas.drawText(text, (width - textWidth) / 2, textSize, mPaint);
+        float textX=width > textWidth?(width - textWidth) / 2:0;
+        canvas.drawText(text, textX, textSize, mPaint);
         Rect scaleRect = new Rect(0, textSize + scaleSpaceText, width, textSize + scaleSpaceText + scaleHeight);
         drawNinepath(canvas, R.drawable.icon_scale, scaleRect);
     }

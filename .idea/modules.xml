@@ -3,7 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/arcgisforandroid.iml" filepath="$PROJECT_DIR$/arcgisforandroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/arcgisforandroid.iml" filepath="$PROJECT_DIR$/.idea/arcgisforandroid.iml" />
+      <module fileurl="file://D:\eclipse\TestArcgis0424\arcgisforandroidps\arcgisforandroid\arcgisforandroid.iml" filepath="D:\eclipse\TestArcgis0424\arcgisforandroidps\arcgisforandroid\arcgisforandroid.iml" />
     </modules>
   </component>
 </project>

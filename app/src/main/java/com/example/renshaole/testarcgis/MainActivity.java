@@ -3,6 +3,7 @@ package com.example.renshaole.testarcgis;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,8 +45,10 @@ import com.esri.android.map.LocationDisplayManager;
 import com.esri.android.map.MapView;
 import com.esri.android.map.ags.ArcGISLocalTiledLayer;
 import com.esri.android.map.ags.ArcGISTiledMapServiceLayer;
+import com.esri.android.map.event.OnPanListener;
 import com.esri.android.map.event.OnZoomListener;
 import com.esri.android.runtime.ArcGISRuntime;
+import com.esri.core.geometry.CoordinateConversion;
 import com.esri.core.geometry.Envelope;
 import com.esri.core.geometry.GeometryEngine;
 import com.esri.core.geometry.Point;
@@ -73,6 +76,7 @@ import com.example.renshaole.testarcgis.location.GPSLocationManager;
 import com.example.renshaole.testarcgis.location.GPSProviderStatus;
 import com.example.renshaole.testarcgis.pop.ConfirmDialogPopWindow;
 import com.example.renshaole.testarcgis.utils.BeanUtil;
+import com.example.renshaole.testarcgis.utils.CoordinateTransform;
 import com.example.renshaole.testarcgis.utils.FileUtil;
 import com.example.renshaole.testarcgis.utils.MapScaleView;
 import com.example.renshaole.testarcgis.utils.SPUtils;
@@ -90,6 +94,8 @@ import java.io.FileInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -177,6 +183,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     private long sTime;
     private long aTime;
 
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @SuppressLint({"MissingPermission", "HandlerLeak"})
     @Override
@@ -263,17 +270,23 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
         });
         //在线地图
         //String strMapUrl="http://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer";
+
         String strMapUrl = "http://cache1.arcgisonline.cn/ArcGIS/rest/services/ChinaOnlineCommunity/MapServer";
         ArcGISTiledMapServiceLayer arcGISTiledMapServiceLayer = new ArcGISTiledMapServiceLayer(strMapUrl);
+        SpatialReference spBottom = arcGISTiledMapServiceLayer.getSpatialReference();
         this.mapView.addLayer(arcGISTiledMapServiceLayer);
+
+
         ArcGISRuntime.setClientId("1eFHW78avlnRUPHm");
         //未授予的权限为空，表示都授予了
         if (mPermissionList.isEmpty()) {
             //离线地图
-//            String theOfflineTiledLayers = getSDPath() + "/DCIM/test.tpk";
-//            ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
-//            this.mapView.addLayer(tLayer);
-//            this.mapView.addLayer(new GraphicsLayer());
+            //String theOfflineTiledLayers = getSDPath() + "/DCIM/test.tpk";
+            //ArcGISLocalTiledLayer tLayer = new ArcGISLocalTiledLayer(theOfflineTiledLayers);
+            //this.mapView.addLayer(tLayer);
+
+
+            this.mapView.addLayer(new GraphicsLayer());
             locationDisplayManager = mapView.getLocationDisplayManager();//获取定位类
             locationDisplayManager.setShowLocation(true);
             locationDisplayManager.setAccuracyCircleOn(false);       //是否要圈
@@ -287,6 +300,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                 e.printStackTrace();
             }
             locationDisplayManager.start();//开始定位
+
         } else {//请求权限方法
             String[] permissions = mPermissionList.toArray(new String[mPermissionList.size()]);//将List转为数组
             ActivityCompat.requestPermissions(MainActivity.this, permissions, MY_PERMISSIONS_REQUEST_CALL_PHONE);
@@ -352,13 +366,18 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
                 Log.d("AAA", "Lon:" + df.format(lon) + " , " + "Lat:" + df.format(lat));
                 wgspoint = new Point(lon, lat);
-                tvX.setText("纬度：" +   new DecimalFormat("#.000000").format(wgspoint.getX()));
-                tvY.setText("经度：" + new DecimalFormat("#.000000").format(wgspoint.getY()));
+                tvX.setText("经度：" +   new DecimalFormat("#.000000").format(wgspoint.getX()));
+                tvY.setText("纬度：" + new DecimalFormat("#.000000").format(wgspoint.getY()));
                 String locStr = getCurrentLocation(location);
                 MyMessage.MSG_ENTITYLOCXY = locStr;
 //                dataHelper.addTask(wgspoint.getX(),wgspoint.getY());
 //                dataHelper.GetUserList();
-                mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(4326), mapView.getSpatialReference());
+                //CoordinateTransform vv=new CoordinateTransform();
+                //Point gcjPoint=vv.wgs84togcj02(lon,lat);
+                //wgspoint=gcjPoint;
+                mapPoint = (Point) GeometryEngine.project(wgspoint, SpatialReference.create(SpatialReference.WKID_WGS84), mapView.getSpatialReference());
+                //double[] dd= CoordinateTransform.transform(lat,lon);
+                //mapPoint=new Point(dd[1],dd[0]);
                 //判断是否开启轨迹
                 if (chkbox_isGuiJi.isChecked()) {
                     if (pointCount == 0) {
@@ -425,7 +444,6 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
                     mapView.centerAt(mapPoint, true);
                 }
 
-
             }
 
             @Override
@@ -441,6 +459,34 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
             public void onProviderDisabled(String provider) {
             }
         });
+
+        // 地图平移监听事件 gao
+        mapView.setOnPanListener(new OnPanListener() {
+
+            @Override
+            public void prePointerMove(float v, float v1, float v2, float v3) {
+
+            }
+
+            @Override
+            public void postPointerMove(float v, float v1, float v2, float v3) {
+
+            }
+
+            @Override
+            public void prePointerUp(float v, float v1, float v2, float v3) {
+
+            }
+
+            @Override
+            public void postPointerUp(float v, float v1, float v2, float v3) {
+                //判断是否为跟随模式
+                if (chk_isfollow.isChecked()) {
+                    mapView.centerAt(mapPoint, true);
+                }
+            }
+        });
+
         //通过设置checkbox的监听事件，判断checkbox是否被选中
         chkbox_isLookGuiJi.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -868,7 +914,7 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
     protected void onResume() {
         super.onResume();
         mapView.unpause();
-        mapView.setScale(1000);
+        //mapView.setScale(1000); //恢复的时候保持缩放比例 gao
 
     }
 
@@ -961,6 +1007,53 @@ public class MainActivity extends AdaptationActivity implements DrawEventListene
 
     }
 
+    /**
+     * 从别的页面打开此页
+     * @param context
+     */
+    public static void start(Context context){
+        Activity act = getActivity();
+        if(act.getLocalClassName().equals("MainActivity")) {
+            return;
+        }
+
+
+        Intent intent = new Intent(context, MainActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static Activity getActivity() {
+        Class activityThreadClass = null;
+        try {
+            activityThreadClass = Class.forName("android.app.ActivityThread");
+            Object activityThread = activityThreadClass.getMethod("currentActivityThread").invoke(null);
+            Field activitiesField = activityThreadClass.getDeclaredField("mActivities");
+            activitiesField.setAccessible(true);
+            Map activities = (Map) activitiesField.get(activityThread);
+            for (Object activityRecord : activities.values()) {
+                Class activityRecordClass = activityRecord.getClass();
+                Field pausedField = activityRecordClass.getDeclaredField("paused");
+                pausedField.setAccessible(true);
+                if (!pausedField.getBoolean(activityRecord)) {
+                    Field activityField = activityRecordClass.getDeclaredField("activity");
+                    activityField.setAccessible(true);
+                    Activity activity = (Activity) activityField.get(activityRecord);
+                    return activity;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     /**
      * 获取系统当前时间
      * @return
